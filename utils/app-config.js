@@ -4,6 +4,6 @@ const mediaUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
 
 const placeholderImage = 'https://place-hold.it/300x200&text=Choose';
 
-const appId = 'jotain';
+const appId = 'BootlegTinder';
 
 export {apiUrl, mediaUrl, placeholderImage, appId};
