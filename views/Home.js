@@ -14,5 +14,4 @@ Home.propTypes = {
   navigation: PropTypes.object,
 };
 
-
 export default Home;
