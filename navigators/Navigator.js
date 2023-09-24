@@ -38,7 +38,7 @@ const Stackscreen = () => {
           {/* <Stack.Screen name="Modify file" component={Modify} /> */}
         </>
       ) : (
-        <Stack.Screen name="Very Cool Header Text" component={Login} />
+        <Stack.Screen name="Login" component={Login} />
       )}
     </Stack.Navigator>
   );
