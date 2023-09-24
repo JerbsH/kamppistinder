@@ -1,14 +1,13 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
 import {formatDate} from '../utils/functions';
-import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native';
-import { Button, Card, ListItem, Text } from '@ui-kitten/components';
+import {Button, Card, ListItem, Text} from '@ui-kitten/components';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -18,7 +17,6 @@ const Single = ({route, navigation}) => {
   const {postFavourite, getFavouritesById, deleteFavourite} = useFavourite();
   const [likes, setLikes] = useState([]);
 
-  const videoRef = useRef(null);
 
   const {
     title,
@@ -99,31 +97,10 @@ const Single = ({route, navigation}) => {
     }
   };
 
-  const showVideoInFullscreen = async () => {
-    try {
-      await videoRef.current.presentFullscreenPlayer();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   useEffect(() => {
     unlockOrientation();
+    lockOrientation();
     fetchOwner();
-
-    // fullscreen video on landscape
-    const orientSub = ScreenOrientation.addOrientationChangeListener(
-      (event) => {
-        if (event.orientationInfo.orientation > 2) {
-          videoRef.current && showVideoInFullscreen();
-        }
-      },
-    );
-
-    return () => {
-      ScreenOrientation.removeOrientationChangeListener(orientSub);
-      lockOrientation();
-    };
   }, []);
 
   useEffect(() => {
@@ -135,22 +112,11 @@ const Single = ({route, navigation}) => {
     <ScrollView>
       <Card>
         <Card.Title>{title}</Card.Title>
-        {mediaType === 'image' ? (
-          <Card.Image
-            source={{uri: mediaUrl + filename}}
-            resizeMode="center"
-            style={{height: 300}}
-          />
-        ) : (
-          <Video
-            source={{uri: mediaUrl + filename}}
-            style={{height: 300}}
-            useNativeControls={true}
-            shouldPlay={true}
-            isLooping={true}
-            ref={videoRef}
-          />
-        )}
+        <Card.Image
+          source={{uri: mediaUrl + filename}}
+          resizeMode="center"
+          style={{height: 300}}
+        />
         <ListItem>
           <Text>{description}</Text>
         </ListItem>

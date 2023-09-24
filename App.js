@@ -1,17 +1,12 @@
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, Button, Layout, Text } from '@ui-kitten/components';
-
-const App = () => {
-  return (
-     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Text category='h1'>HOME</Text>
-    <Button>MORO</Button>
-  </Layout>
-  );
-};
+import {ApplicationProvider, Button, Layout, Text} from '@ui-kitten/components';
+import {MainProvider} from './contexts/MainContext';
+import Navigator from './navigators/Navigator';
 
 export default () => (
   <ApplicationProvider {...eva} theme={eva.light}>
-    <App/>
+    <MainProvider>
+      <Navigator />
+    </MainProvider>
   </ApplicationProvider>
 );
