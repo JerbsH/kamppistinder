@@ -40,8 +40,8 @@ const Tabscreen = () => {
         options={{
           tabBarIcon: homeIcon,
           tabBarActiveTintColor: '#000',
-          tabBarActiveBackgroundColor: '#ff6d1f',
-          tabBarInactiveTintColor: '#000'
+          tabBarActiveBackgroundColor: '#ffa575',
+          tabBarInactiveTintColor: '#000',
         }}
       />
       <Tab.Screen
@@ -50,7 +50,7 @@ const Tabscreen = () => {
         options={{
           tabBarIcon: personIcon,
           tabBarActiveTintColor: '#000',
-          tabBarActiveBackgroundColor: '#ff6d1f',
+          tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',
         }}
       />
@@ -60,7 +60,7 @@ const Tabscreen = () => {
         options={{
           tabBarIcon: messageIcon,
           tabBarActiveTintColor: '#000',
-          tabBarActiveBackgroundColor: '#ff6d1f',
+          tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000'
         }}
       />
