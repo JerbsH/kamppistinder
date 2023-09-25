@@ -8,16 +8,62 @@ import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
 import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
+import {Icon} from '@ui-kitten/components';
+import {StyleSheet} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const homeIcon = () => (
+  <Icon name="home-outline" style={styles.icon} fill="#000" />
+);
+const personIcon = () => (
+  <Icon name="person-outline" style={styles.icon} fill="#000" />
+);
+const messageIcon = () => (
+  <Icon name="message-circle-outline" style={styles.icon} fill="#000" />
+);
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 30,
+    height: 30,
+  },
+});
+
 const Tabscreen = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Upload" component={Upload} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: homeIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ff6d1f',
+          tabBarInactiveTintColor: '#000'
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: personIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ff6d1f',
+          tabBarInactiveTintColor: '#000',
+        }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={Upload}
+        options={{
+          tabBarIcon: messageIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ff6d1f',
+          tabBarInactiveTintColor: '#000'
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -55,6 +101,5 @@ const Navigator = () => {
 Login.propTypes = {
   navigation: PropTypes.object,
 };
-
 
 export default Navigator;

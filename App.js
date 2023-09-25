@@ -1,12 +1,16 @@
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider, Button, Layout, Text} from '@ui-kitten/components';
+import {ApplicationProvider, Button, IconRegistry, Layout, Text} from '@ui-kitten/components';
 import {MainProvider} from './contexts/MainContext';
 import Navigator from './navigators/Navigator';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 export default () => (
-  <ApplicationProvider {...eva} theme={eva.light}>
-    <MainProvider>
-      <Navigator />
-    </MainProvider>
-  </ApplicationProvider>
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <MainProvider>
+        <Navigator />
+      </MainProvider>
+    </ApplicationProvider>
+  </>
 );
