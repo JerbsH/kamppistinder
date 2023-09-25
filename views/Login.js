@@ -1,25 +1,55 @@
-import {Button, Layout, Text} from '@ui-kitten/components';
+import {Button, Layout, Text, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import LoginForm from '../components/LoginForm';
+import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
-  const [isLoginFormVisible, setIsLoginFormVisible] = useState(false); // Add this state
+  const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
+  const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
+
 
   const showLoginForm = () => {
     setIsLoginFormVisible(true);
+    setIsRegisterFormVisible(false);
   };
+  const showRegisterForm = () => {
+    setIsLoginFormVisible(false);
+    setIsRegisterFormVisible(true);
+  };
+
+  const buttonStyle = {
+    width: '40%',
+  };
+
   return (
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text category="h1">Login</Text>
-      <Button onPress={showLoginForm}>Login</Button>
+      <Button
+      onPress={showLoginForm}
+      style={buttonStyle}
+      size='large'
+      >Login</Button>
+      <Divider style={{height: "20%"}} ></Divider>
+      <Button
+      onPress={showRegisterForm}
+      style={buttonStyle}
+      size='large'
+      >Or Register?</Button>
       {/* Render the LoginForm as a modal */}
       {isLoginFormVisible && (
         <LoginForm
           visible={isLoginFormVisible}
           onClose={() => setIsLoginFormVisible(false)}
+        />
+      )}
+      {/* Render the RegisterForm as a modal */}
+      {isRegisterFormVisible && (
+        <RegisterForm
+          setToggleRegister={() => setIsRegisterFormVisible(false)}
+          visible={isRegisterFormVisible}
+          onClose={() => setIsRegisterFormVisible(false)}
         />
       )}
     </Layout>
