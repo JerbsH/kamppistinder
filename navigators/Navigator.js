@@ -52,6 +52,7 @@ const Tabscreen = () => {
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
         }}
       />
       <Tab.Screen
