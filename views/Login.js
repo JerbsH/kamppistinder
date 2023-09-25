@@ -1,7 +1,7 @@
 import {Button, Layout, Text, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
-import { MainContext } from '../contexts/MainContext';
+import {useContext, useState} from 'react';
+import {MainContext} from '../contexts/MainContext';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
@@ -9,7 +9,6 @@ const Login = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
-
 
   const showLoginForm = () => {
     setIsLoginFormVisible(true);
@@ -24,22 +23,15 @@ const Login = ({navigation}) => {
     width: '40%',
   };
 
-  const login = () => {
-    setIsLoggedIn(true);
-  };
   return (
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Button
-      onPress={showLoginForm}
-      style={buttonStyle}
-      size='large'
-      >Login</Button>
-      <Divider style={{height: "20%"}} ></Divider>
-      <Button
-      onPress={showRegisterForm}
-      style={buttonStyle}
-      size='large'
-      >Or Register?</Button>
+      <Button onPress={showLoginForm} style={buttonStyle} size="large">
+        Login
+      </Button>
+      <Divider style={{height: '20%'}}></Divider>
+      <Button onPress={showRegisterForm} style={buttonStyle} size="large">
+        Or Register?
+      </Button>
       {/* Render the LoginForm as a modal */}
       {isLoginFormVisible && (
         <LoginForm
