@@ -1,11 +1,11 @@
-import {View, Text, TextInput, Button} from 'react-native';
+import {Modal, Text, Button, Card, Input, Layout} from '@ui-kitten/components';
 import React, {useContext} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {useAuthentication} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginForm = () => {
+const LoginForm = ({visible, onClose}) => {
   const {postLogin} = useAuthentication();
   const {setIsLoggedIn, setUser} = useContext(MainContext);
 
@@ -19,6 +19,7 @@ const LoginForm = () => {
       password: '',
     },
   });
+
   const logIn = async (loginData) => {
     console.log('Button pressed');
     try {
@@ -27,50 +28,75 @@ const LoginForm = () => {
       await AsyncStorage.setItem('userToken', loginResponse.token);
       setIsLoggedIn(true);
       setUser(loginResponse.user);
+      onClose(); // Close the modal after successful login
     } catch (error) {
       console.error(error);
     }
   };
-  return (
-    <View>
-      <Text>Login</Text>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            placeholder="username"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-          />
-        )}
-        name="username"
-      />
-      {errors.username && <Text>This is required.</Text>}
 
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 100,
+  return (
+    <Modal
+      visible={visible}
+      backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
+      onBackdropPress={onClose}
+      style={{width: "70%"}}
+    >
+      <Card
+        style={{
+          width: '100%',
+          alignSelf: 'center',
         }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            placeholder="password"
-            secureTextEntry={true}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
+      >
+        <Layout>
+          <Text category="h5" alignSelf="center">
+            Login
+          </Text>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                placeholder="username"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                autoCapitalize="none"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+              />
+            )}
+            name="username"
           />
-        )}
-        name="password"
-      />
-      <Button title="Submit" onPress={handleSubmit(logIn)} />
-    </View>
+          {errors.username && (
+            <Text style={{color: 'red'}}>This is required.</Text>
+          )}
+
+          <Controller
+            control={control}
+            rules={{
+              maxLength: 100,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                placeholder="password"
+                secureTextEntry={true}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                autoCapitalize="none"
+                style={{width: '90%',alignSelf: 'center',marginVertical: 8,
+                }}
+              />
+            )}
+            name="password"
+          />
+          <Button onPress={handleSubmit(logIn)}
+          style={{width: "90%", alignSelf: "center", marginVertical: 8,}}>Login</Button>
+        </Layout>
+      </Card>
+    </Modal>
   );
 };
+
 export default LoginForm;
