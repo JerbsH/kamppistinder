@@ -154,6 +154,7 @@ const RegisterForm = ({setToggleRegister, visible, onClose}) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                autoCapitalize="none"
                 secureTextEntry={true}
                 errorMessage={errors.confirm_password?.message}
                 style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
