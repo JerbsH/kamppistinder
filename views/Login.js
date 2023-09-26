@@ -1,15 +1,36 @@
 import {Button, Layout, Text, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
-import {useContext, useState} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser} from '../hooks/ApiHooks';
 const Login = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
 
+  const checkToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const userData = await getUserByToken(token);
+      console.log('token', token);
+      console.log('userdata', userData);
+      if (userData) {
+        setIsLoggedIn(true);
+        setUser(userData);
+      }
+    } catch (error) {
+      console.log('checkToken', error);
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  
   const showLoginForm = () => {
     setIsLoginFormVisible(true);
     setIsRegisterFormVisible(false);
