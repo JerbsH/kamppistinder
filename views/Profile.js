@@ -4,7 +4,7 @@ import {Image} from 'react-native';
 import { useContext, useEffect } from 'react';
 import { MainContext } from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native';
+
 
 const Profile = ({navigation}) => {
   const {setIsLoggedIn} = useContext(MainContext);

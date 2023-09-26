@@ -6,8 +6,10 @@ import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
+
 const Login = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {getUserByToken} = useUser();
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
 
@@ -30,7 +32,7 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-  
+
   const showLoginForm = () => {
     setIsLoginFormVisible(true);
     setIsRegisterFormVisible(false);
