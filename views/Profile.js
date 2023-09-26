@@ -1,7 +1,5 @@
-import {Button, Card, Divider, Layout, Text} from '@ui-kitten/components';
-import {PropTypes} from 'prop-types';
 import {Image} from 'react-native';
-import {Button, Layout , Text} from '@ui-kitten/components';
+import {Button, Card, Layout , Text} from '@ui-kitten/components';
 import { PropTypes } from 'prop-types';
 import { useContext } from 'react';
 import { MainContext } from '../contexts/MainContext';
