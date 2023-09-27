@@ -14,6 +14,7 @@ import {StyleSheet} from 'react-native';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+
 const homeIcon = () => (
   <Icon name="home-outline" style={styles.icon} fill="#000" />
 );

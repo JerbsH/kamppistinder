@@ -3,9 +3,9 @@ import React from 'react';
 import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
-import {PropTypes} from 'prop-types';
+import PropTypes from 'prop-types';
 
-const RegisterForm = ({setToggleRegister, visible, onClose}) => {
+const RegisterForm = ({visible, onClose}) => {
   const {postUser, checkUsername} = useUser();
   const {
     control,
@@ -24,7 +24,6 @@ const RegisterForm = ({setToggleRegister, visible, onClose}) => {
       const registerResult = await postUser(registerData);
       console.log('registeration result', registerResult);
       Alert.alert('Success', registerResult.message);
-      setToggleRegister(false);
     } catch (error) {
       Alert.alert('Error', error.message);
     }
