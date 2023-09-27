@@ -3,7 +3,7 @@ import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
 import { Modal, Button, Card, Input } from '@ui-kitten/components';
-import {PropTypes} from 'prop-types';
+import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 
@@ -49,7 +49,6 @@ const ModifyForm = ({setToggleModify, visible, onClose, user}) => {
       style={{width: '70%'}}
     >
       <Card containerStyle={{borderRadius: 10}}>
-        <Card.Title style={{fontSize: 15}}>UPDATE</Card.Title>
         <Controller
           control={control}
           rules={{
@@ -168,9 +167,8 @@ const ModifyForm = ({setToggleModify, visible, onClose, user}) => {
           buttonStyle={{
             borderRadius: 10,
           }}
-          title="Update"
-          onPress={handleSubmit(update)}
-        />
+          onPress={handleSubmit(update)}>Update</Button>
+
       </Card>
     </Modal>
   );

@@ -3,7 +3,7 @@ import React from 'react';
 import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
-import {PropTypes} from 'prop-types';
+import PropTypes from 'prop-types';
 
 const RegisterForm = ({setToggleRegister, visible, onClose}) => {
   const {postUser, checkUsername} = useUser();
