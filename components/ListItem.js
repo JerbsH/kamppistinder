@@ -1,11 +1,17 @@
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
-import {Alert} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {Avatar, Button, List, ListItem as KittenListItem} from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  List,
+  ListItem as KittenListItem,
+  Divider,
+} from '@ui-kitten/components';
 
 const ListItem = ({singleMedia, navigation, userId}) => {
   const {deleteMedia} = useMedia();
@@ -42,31 +48,16 @@ const ListItem = ({singleMedia, navigation, userId}) => {
   };
 
   return (
-    <List
+    <KittenListItem
+      style={styles.ListItem}
+      title={singleMedia.title}
+      description={singleMedia.description}
+      accessoryLeft={() => <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />}
       onPress={() => {
         console.log('touched!', singleMedia.title);
-        navigation.navigate('Single', singleMedia);
+        // navigation.navigate('Single', singleMedia);
       }}
-    >
-      <Avatar
-        size="large"
-        source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
-      ></Avatar>
-      <KittenListItem.Title>{singleMedia.title}</KittenListItem.Title>
-      <KittenListItem.Subtitle numberOfLines={3}>
-        {singleMedia.description}
-      </KittenListItem.Subtitle>
-      {singleMedia.user_id == userId && (
-        <>
-          <Button size="sm" onPress={modifyFile}>
-            Modify
-          </Button>
-          <Button size="sm" onPress={deleteFile} color={'error'}>
-            Delete
-          </Button>
-        </>
-      )}
-    </List>
+    />
   );
 };
 
@@ -75,5 +66,14 @@ ListItem.propTypes = {
   navigation: PropTypes.object,
   userId: PropTypes.number,
 };
+
+const styles = StyleSheet.create({
+  container: {
+    maxHeight: 192,
+  },
+  ListItem: {
+    width: '100%',
+  },
+});
 
 export default ListItem;
