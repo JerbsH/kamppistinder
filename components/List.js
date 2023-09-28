@@ -1,4 +1,4 @@
-import { List as KittenList } from '@ui-kitten/components';
+import { List as KittenList} from '@ui-kitten/components';
 import ListItem from './ListItem';
 import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';

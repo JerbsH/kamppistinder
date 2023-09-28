@@ -12,10 +12,8 @@ const Home = ({ navigation }) => {
   };
 
   return (
-
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text category="h1">HOME</Text>
-
+    // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    <Layout >
       <Button
         onPress={toggleUploadModal}
         style={{ width: '90%', alignSelf: 'center', marginVertical: 8 }}
@@ -37,7 +35,7 @@ const Home = ({ navigation }) => {
         onClose={toggleUploadModal}
         navigation={navigation} />
       )}
-      <List navigation={navigation}/>
+      <List/>
     </Layout>
   );
 };
