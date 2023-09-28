@@ -33,7 +33,6 @@ const Login = ({navigation}) => {
     checkToken();
   }, []);
 
-
   const showLoginForm = () => {
     setIsLoginFormVisible(true);
     setIsRegisterFormVisible(false);

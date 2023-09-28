@@ -15,7 +15,6 @@ import MyFiles from '../views/MyFiles';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-
 const homeIcon = () => (
   <Icon name="home-outline" style={styles.icon} fill="#000" />
 );
@@ -64,7 +63,7 @@ const Tabscreen = () => {
           tabBarIcon: messageIcon,
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
-          tabBarInactiveTintColor: '#000'
+          tabBarInactiveTintColor: '#000',
         }}
       />
     </Tab.Navigator>

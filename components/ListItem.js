@@ -52,7 +52,9 @@ const ListItem = ({singleMedia, navigation, userId}) => {
       style={styles.ListItem}
       title={singleMedia.title}
       description={singleMedia.description}
-      accessoryLeft={() => <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />}
+      accessoryLeft={() => (
+        <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />
+      )}
       onPress={() => {
         console.log('touched!', singleMedia.title);
         // navigation.navigate('Single', singleMedia);

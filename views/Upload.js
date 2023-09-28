@@ -15,7 +15,8 @@ const Upload = ({ visible, onClose, navigation }) => {
   const [image, setImage] = useState(placeholderImage);
   const { postMedia, loading } = useMedia();
   const { postTag } = useTag();
-  const [type, setType] = useState('image')
+  const [type, setType] = useState('image');
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const {
     control,
@@ -59,6 +60,7 @@ const Upload = ({ visible, onClose, navigation }) => {
       );
       console.log('postTag', tagResponse);
       setUpdate(!update);
+      setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
         {
           text: 'Ok',
@@ -79,6 +81,10 @@ const Upload = ({ visible, onClose, navigation }) => {
     setType('image');
     reset();
   };
+
+  if (uploadSuccess) {
+    onClose();
+  }
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
