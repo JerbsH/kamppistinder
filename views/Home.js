@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Text, Button} from '@ui-kitten/components';
+import {Layout, Text, Button, Card} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import Upload from './Upload';
 import List from '../components/List';
@@ -24,22 +24,24 @@ const Home = ({navigation}) => {
 
   return (
     // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    <Layout>
-      <Button
-        onPress={toggleUploadModal}
-        style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-      >
-        Make a post
-      </Button>
+    <Layout style={{flex: 1}}>
+      <Layout style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 }}>
+        <Button
+          onPress={toggleUploadModal}
+          style={{ flex: 1, marginHorizontal: 5 }}
+        >
+          Make a post
+        </Button>
 
-      <Button
-        style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-        onPress={() => {
-          navigation.navigate('My files');
-        }}
-      >
-        My Files
-      </Button>
+        <Button
+          style={{ flex: 1, marginHorizontal: 5 }}
+          onPress={() => {
+            navigation.navigate('My files');
+          }}
+        >
+          My Files
+        </Button>
+      </Layout>
       {/* Render the Upload component inside a modal */}
       {uploadModalVisible && (
         <Upload
