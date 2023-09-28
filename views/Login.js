@@ -1,12 +1,10 @@
-import {Button, Layout, Text, Divider} from '@ui-kitten/components';
+import {Button, Layout, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
-import {useContext, useState} from 'react';
-import {MainContext} from '../contexts/MainContext';
+import {useState} from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
 
