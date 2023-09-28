@@ -1,5 +1,5 @@
 import { Modal, Text, Button, Card, Input, Layout, Image} from '@ui-kitten/components';
-import { Alert } from 'react-native';
+import { Alert} from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import { appId, placeholderImage } from '../utils/app-config';
@@ -137,6 +137,8 @@ const Upload = ({ visible, onClose, navigation }) => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
+                multiline={true}
+
                 placeholder="Description (10 characters min.)"
                 onBlur={onBlur}
                 onChangeText={onChange}
