@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import MyFiles from '../views/MyFiles';
+import SwipeCards from '../views/SwipeCards';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,7 +25,9 @@ const personIcon = () => (
 const messageIcon = () => (
   <Icon name="message-circle-outline" style={styles.icon} fill="#000" />
 );
-
+const swipeIcon = () =>  {
+  <Icon name="person-outline" style={styles.icon} fill="#000" />
+}
 const styles = StyleSheet.create({
   icon: {
     width: 30,
@@ -62,6 +65,17 @@ const Tabscreen = () => {
         component={Upload}
         options={{
           tabBarIcon: messageIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ffa575',
+          tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Tab.Screen
+        name="Swipe Cards" // Name of the new tab
+        component={SwipeCards} // Use the SwipeCards component here
+        options={{
+          tabBarIcon: swipeIcon, // You can define your own icon function
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',
