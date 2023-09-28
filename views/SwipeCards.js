@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Animated, StyleSheet, Dimensions, Text, View, Image } from 'react-native';
 import {
   PanGestureHandler,
@@ -11,11 +11,24 @@ import { mediaUrl } from '../utils/app-config';
 
 const { width } = Dimensions.get('window');
 
-const SwipeCards = ({ singleMedia = {} }) => {
-  const [index, setIndex] = useState(0);
+const SwipeCards = () => {
   const { mediaArray } = useMedia();
 
-  const translateX = useRef(new Animated.Value(0)).current;
+  const [index, setIndex] = useState(0);
+  const numMedia = mediaArray.length;
+
+  const translateX = useMemo(() => new Animated.Value(0), []);
+
+  const rotate = translateX.interpolate({
+    inputRange: [-width / 2, width / 2],
+    outputRange: ['-30deg', '30deg'],
+    extrapolate: 'clamp',
+  });
+
+  const handleGestureEvent = Animated.event(
+    [{ nativeEvent: { translationX: translateX } }],
+    { useNativeDriver: false }
+  );
 
   const handleSwipe = ({ nativeEvent }) => {
     const { state, translationX, velocityX } = nativeEvent;
@@ -27,7 +40,7 @@ const SwipeCards = ({ singleMedia = {} }) => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          setIndex(index + 1);
+          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
           translateX.setValue(0);
         });
       } else if (translationX < -width / 2 || velocityX < -800) {
@@ -37,7 +50,7 @@ const SwipeCards = ({ singleMedia = {} }) => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          setIndex(index + 1);
+          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
           translateX.setValue(0);
         });
       } else {
@@ -53,34 +66,34 @@ const SwipeCards = ({ singleMedia = {} }) => {
   };
 
   useEffect(() => {
-    // Reset index when mediaArray changes
-    setIndex(0);
+    if (mediaArray.length === 0) {
+      setIndex(0);
+    }
   }, [mediaArray]);
 
-  // Check if currentMedia exists in mediaArray, otherwise, use an empty object
-  const currentMedia = mediaArray[index] || {};
+  const currentMedia = useMemo(() => mediaArray[index] || {}, [mediaArray, index]);
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <PanGestureHandler
-        onGestureEvent={Animated.event(
-          [{ nativeEvent: { translationX: translateX } }],
-          { useNativeDriver: true }
-        )}
+        onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleSwipe}
       >
         <Animated.View
           style={[
             styles.card,
             {
-              transform: [{ translateX }],
+              transform: [
+                { translateX },
+                { rotate },
+              ],
             },
           ]}
         >
           <Image
             source={{ uri: mediaUrl + currentMedia.filename }}
             style={styles.image}
-            resizeMode="cover" // Change this to "cover" to fill 50% of the card
+            resizeMode="cover"
           />
           <View style={styles.cardContent}>
             <Text style={styles.title}>{currentMedia.title}</Text>
@@ -112,7 +125,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '50%', // Adjust this to control the image height
+    height: '50%',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
@@ -134,7 +147,7 @@ const styles = StyleSheet.create({
 
 SwipeCards.propTypes = {
   navigation: PropTypes.object,
-  singleMedia: PropTypes.object, // Define the prop type for singleMedia
+  singleMedia: PropTypes.object,
 };
 
 export default SwipeCards;
