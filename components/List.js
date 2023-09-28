@@ -1,4 +1,4 @@
-import { FlatList } from '@ui-kitten/components';
+import { List as KittenList } from '@ui-kitten/components';
 import ListItem from './ListItem';
 import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ const List = ({navigation, myFilesOnly}) => {
   const {mediaArray} = useMedia(update, myFilesOnly);
 
   return (
-    <FlatList
+    <KittenList
       data={mediaArray}
       renderItem={({item}) => (
         <ListItem

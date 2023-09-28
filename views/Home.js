@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Text, Button} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import Upload from './Upload';
+import List from '../components/List';
 
 const Home = ({ navigation }) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -21,6 +22,14 @@ const Home = ({ navigation }) => {
       >
         Make a post
       </Button>
+
+      <Button
+          onPress={() => {
+            navigation.navigate('My files');
+          }}
+        >
+          My Files
+        </Button>
       {/* Render the Upload component inside a modal */}
       {uploadModalVisible && (
         <Upload
@@ -28,6 +37,7 @@ const Home = ({ navigation }) => {
         onClose={toggleUploadModal}
         navigation={navigation} />
       )}
+      <List navigation={navigation}/>
     </Layout>
   );
 };

@@ -12,6 +12,7 @@ const Login = ({navigation}) => {
   const {getUserByToken} = useUser();
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isRegisterFormVisible, setIsRegisterFormVisible] = useState(false);
+  const [shouldCloseRegisterForm, setShouldCloseRegisterForm] = useState(false);
 
   const checkToken = async () => {
     try {
@@ -45,6 +46,15 @@ const Login = ({navigation}) => {
   const buttonStyle = {
     width: '40%',
   };
+  const registerSuccessCallback = () => {
+    setShouldCloseRegisterForm(true);
+  };
+  useEffect(() => {
+    if (shouldCloseRegisterForm) {
+      setIsRegisterFormVisible(false);
+      setShouldCloseRegisterForm(false);
+    }
+  }, [shouldCloseRegisterForm]);
 
   return (
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -68,6 +78,7 @@ const Login = ({navigation}) => {
           setToggleRegister={() => setIsRegisterFormVisible(false)}
           visible={isRegisterFormVisible}
           onClose={() => setIsRegisterFormVisible(false)}
+          onSuccess={registerSuccessCallback}
         />
       )}
     </Layout>

@@ -10,6 +10,7 @@ import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
 import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
+import MyFiles from '../views/MyFiles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -82,7 +83,7 @@ const Stackscreen = () => {
             options={{headerShown: false}}
           />
           {/* <Stack.Screen name="Single" component={Single} /> */}
-          {/* <Stack.Screen name="My files" component={MyFiles} /> */}
+          <Stack.Screen name="My files" component={MyFiles} />
           {/* <Stack.Screen name="Modify file" component={Modify} /> */}
         </>
       ) : (

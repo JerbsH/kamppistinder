@@ -5,7 +5,11 @@ import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {Avatar, Button, List, ListItem as KittenListItem} from '@ui-kitten/components';
+import {
+  Avatar,
+  Button,
+  ListItem as KittenListItem,
+} from '@ui-kitten/components';
 
 const ListItem = ({singleMedia, navigation, userId}) => {
   const {deleteMedia} = useMedia();
@@ -42,7 +46,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
   };
 
   return (
-    <List
+    <KittenListItem
       onPress={() => {
         console.log('touched!', singleMedia.title);
         navigation.navigate('Single', singleMedia);
@@ -53,9 +57,9 @@ const ListItem = ({singleMedia, navigation, userId}) => {
         source={{uri: mediaUrl + singleMedia.thumbnails.w160}}
       ></Avatar>
       <KittenListItem.Title>{singleMedia.title}</KittenListItem.Title>
-      <KittenListItem.Subtitle numberOfLines={3}>
+      <KittenListItem.Description numberOfLines={3}>
         {singleMedia.description}
-      </KittenListItem.Subtitle>
+      </KittenListItem.Description>
       {singleMedia.user_id == userId && (
         <>
           <Button size="sm" onPress={modifyFile}>
@@ -66,7 +70,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
           </Button>
         </>
       )}
-    </List>
+    </KittenListItem>
   );
 };
 

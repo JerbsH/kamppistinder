@@ -4,9 +4,11 @@ import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const RegisterForm = ({visible, onClose}) => {
   const {postUser, checkUsername} = useUser();
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const {
     control,
     handleSubmit,
@@ -24,10 +26,14 @@ const RegisterForm = ({visible, onClose}) => {
       const registerResult = await postUser(registerData);
       console.log('registeration result', registerResult);
       Alert.alert('Success', registerResult.message);
+      setRegistrationSuccess(true);
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
+  if (registrationSuccess) {
+    onClose();
+  }
 
   return (
     <Modal
