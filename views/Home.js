@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Layout, Text, Button, Card} from '@ui-kitten/components';
+import {Layout, Text, Button, Card, Input} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import Upload from './Upload';
 import List from '../components/List';

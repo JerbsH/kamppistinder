@@ -40,10 +40,10 @@ const Tabscreen = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="Swipe Cards"
+        component={SwipeCards}
         options={{
-          tabBarIcon: homeIcon,
+          tabBarIcon: swipeIcon,
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',
@@ -72,17 +72,17 @@ const Tabscreen = () => {
           headerTitleAlign: 'center',
         }}
       />
-      <Tab.Screen
-        name="Swipe Cards"
-        component={SwipeCards}
-        options={{
-          tabBarIcon: swipeIcon,
-          tabBarActiveTintColor: '#000',
-          tabBarActiveBackgroundColor: '#ffa575',
-          tabBarInactiveTintColor: '#000',
-          headerTitleAlign: 'center',
-        }}
-      />
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: homeIcon,
+            tabBarActiveTintColor: '#000',
+            tabBarActiveBackgroundColor: '#ffa575',
+            tabBarInactiveTintColor: '#000',
+            headerTitleAlign: 'center',
+          }}
+        />
     </Tab.Navigator>
   );
 };
