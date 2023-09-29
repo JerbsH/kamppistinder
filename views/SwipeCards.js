@@ -1,25 +1,32 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, Dimensions, Text, View, Image } from 'react-native';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {
+  Animated,
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  Image,
+} from 'react-native';
 import {
   PanGestureHandler,
   GestureHandlerRootView,
   State,
 } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { useFavourite, useMedia } from '../hooks/ApiHooks';
-import { mediaUrl } from '../utils/app-config';
+import {useFavourite, useMedia} from '../hooks/ApiHooks';
+import {mediaUrl} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const SwipeCards = () => {
-  const { mediaArray } = useMedia();
+  const {mediaArray} = useMedia();
   // Initialize the index to keep track of the currently displayed card
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
 
   const translateX = useMemo(() => new Animated.Value(0), []);
-   // for tracking swipes right
+  // for tracking swipes right
   const swipesRef = useRef(0);
   // rotating card when swiping left/right
   const rotate = translateX.interpolate({
@@ -32,21 +39,19 @@ const SwipeCards = () => {
   const [userLike, setUserLike] = useState(false);
   const {postFavourite} = useFavourite();
 
-
   const handleGestureEvent = Animated.event(
-    [{ nativeEvent: { translationX: translateX } }],
-    { useNativeDriver: false }
+    [{nativeEvent: {translationX: translateX}}],
+    {useNativeDriver: false},
   );
   // Handle the swipe gesture
-  const handleSwipe = async ({ nativeEvent }) => {
-    const { state, translationX, velocityX } = nativeEvent;
+  const handleSwipe = async ({nativeEvent}) => {
+    const {state, translationX, velocityX} = nativeEvent;
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
 
         const token = await AsyncStorage.getItem('userToken');
         console.log(currentMedia.file_id);
-        console.log(token);
         try {
           await postFavourite({file_id: currentMedia.file_id}, token);
           setUserLike(true);
@@ -96,7 +101,10 @@ const SwipeCards = () => {
     }
   }, [mediaArray]);
 
-  const currentMedia = useMemo(() => mediaArray[index] || {}, [mediaArray, index]);
+  const currentMedia = useMemo(
+    () => mediaArray[index] || {},
+    [mediaArray, index],
+  );
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -108,15 +116,12 @@ const SwipeCards = () => {
           style={[
             styles.card,
             {
-              transform: [
-                { translateX },
-                { rotate },
-              ],
+              transform: [{translateX}, {rotate}],
             },
           ]}
         >
           <Image
-            source={{ uri: mediaUrl + currentMedia.filename }}
+            source={{uri: mediaUrl + currentMedia.filename}}
             style={styles.image}
             resizeMode="cover"
           />
@@ -143,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     elevation: 3,
     alignItems: 'center',
     justifyContent: 'center',
