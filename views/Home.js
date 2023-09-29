@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Upload from './Upload';
 import List from '../components/List';
 import {useMedia} from '../hooks/ApiHooks';
-import { mediaUrl } from '../utils/app-config';
+import {mediaUrl} from '../utils/app-config';
+import {ScrollView} from 'react-native';
 
 const Home = ({navigation}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -87,13 +88,15 @@ const Home = ({navigation}) => {
       {showList ? (
         <List />
       ) : (
-        searchResults.map((media) => (
-            <Card key={media.id}>
-              <Avatar source={{uri: mediaUrl + media.thumbnails.w160}} />
-              <Text>{media.title}</Text>
-              <Text>{media.description}</Text>
+        <ScrollView>
+          {searchResults.map((item) => (
+            <Card key={item.file_id}>
+              <Avatar source={{uri: mediaUrl + item.filename}} />
+              <Text>{item.title}</Text>
+              <Text>{item.description}</Text>
             </Card>
-        ))
+          ))}
+        </ScrollView>
       )}
     </Layout>
   );
