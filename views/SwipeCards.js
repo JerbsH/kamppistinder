@@ -42,6 +42,8 @@ const SwipeCards = () => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
+          const favouriteId = currentMedia.file_id;
+          console.log('swipe right, fileId:', favouriteId);
           // Increment the index and cycle back to 0 if at the end
           setIndex((prevIndex) => (prevIndex + 1) % numMedia);
           translateX.setValue(0);
