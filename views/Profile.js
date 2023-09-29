@@ -1,14 +1,25 @@
-import {Button, Card,Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Layout, Text} from '@ui-kitten/components';
 import {PropTypes} from 'prop-types';
 import {Image} from 'react-native';
-import { useContext, useEffect } from 'react';
-import { MainContext } from '../contexts/MainContext';
+import {useContext, useEffect, useState} from 'react';
+import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {useTag} from '../hooks/ApiHooks';
+import {mediaUrl} from '../utils/app-config';
+import ModifyForm from '../components/ModifyForm';
 
 const Profile = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const [isModifyVisible, setIsModifyVisible] = useState(false);
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const {getFilesByTag} = useTag();
+  const {setIsLoggedIn, user} = useContext(MainContext);
 
+  // show modify user layout
+  const showModify = () => {
+    setIsModifyVisible(true);
+  };
+
+  // logout functionality for button
   const logOut = async () => {
     console.log('profile, logout');
     try {
@@ -18,11 +29,24 @@ const Profile = ({navigation}) => {
       console.error(error);
     }
   };
+
+  // avatar loading if user has avatar
+  const loadAvatar = async () => {
+    try {
+      const avatars = await getFilesByTag('avatar_' + user.user_id);
+      if (avatars.length > 0) {
+        setAvatar(mediaUrl + avatars.pop().filename);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
+    loadAvatar();
   }, []);
 
   return (
-
     <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Card
         style={{
@@ -33,8 +57,15 @@ const Profile = ({navigation}) => {
           alignItems: 'center',
         }}
       >
+        {/* Render the ModifyForm as a modal */}
+        {isModifyVisible && (
+          <ModifyForm
+            visible={isModifyVisible}
+            onClose={() => setIsModifyVisible(false)}
+          />
+        )}
         <Image
-          source={{uri: 'http://placekitten.com/640'}}
+          source={{uri: avatar}}
           style={{
             width: 250,
             height: 150,
@@ -42,8 +73,8 @@ const Profile = ({navigation}) => {
             resizeMode: 'cover',
           }}
         ></Image>
-        <Text category="h3" style={{textAlign: 'center'}}>
-          NAME
+        <Text category="h3" style={{textAlign: 'center', marginBottom: 5}}>
+          {user.username}
         </Text>
         <Card
           style={{
@@ -51,13 +82,21 @@ const Profile = ({navigation}) => {
             alignItems: 'center',
             flexDirection: 'row',
             marginBottom: 50,
+            justifyContent: 'center',
           }}
         >
-          <Text style={{textAlign: 'center'}}>username</Text>
-          <Text style={{textAlign: 'center'}}>email</Text>
+          <Text style={{textAlign: 'center'}}>Username: {user.username}</Text>
+          <Text style={{textAlign: 'center'}}>Email: {user.email}</Text>
         </Card>
-        <Button style={{borderRadius: 15, marginBottom: 5}}>Edit profile</Button>
-        <Button style={{borderRadius: 15}} onPress={logOut}>Log out</Button>
+        <Button
+          style={{borderRadius: 15, marginBottom: 5}}
+          onPress={showModify}
+        >
+          Edit profile
+        </Button>
+        <Button style={{borderRadius: 15}} onPress={logOut}>
+          Log out
+        </Button>
       </Card>
     </Layout>
   );

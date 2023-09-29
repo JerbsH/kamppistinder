@@ -10,6 +10,8 @@ import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
 import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
+import MyFiles from '../views/MyFiles';
+import SwipeCards from '../views/SwipeCards';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +25,9 @@ const personIcon = () => (
 const messageIcon = () => (
   <Icon name="message-circle-outline" style={styles.icon} fill="#000" />
 );
+const swipeIcon = () => (
+  <Icon name="search-outline" style={styles.icon} fill="#000" />
+);
 
 const styles = StyleSheet.create({
   icon: {
@@ -35,13 +40,14 @@ const Tabscreen = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="Swipe Cards"
+        component={SwipeCards}
         options={{
-          tabBarIcon: homeIcon,
+          tabBarIcon: swipeIcon,
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
         }}
       />
       <Tab.Screen
@@ -62,7 +68,19 @@ const Tabscreen = () => {
           tabBarIcon: messageIcon,
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
-          tabBarInactiveTintColor: '#000'
+          tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: homeIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ffa575',
+          tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
         }}
       />
     </Tab.Navigator>
@@ -80,9 +98,7 @@ const Stackscreen = () => {
             component={Tabscreen}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen name="Single" component={Single} /> */}
-          {/* <Stack.Screen name="My files" component={MyFiles} /> */}
-          {/* <Stack.Screen name="Modify file" component={Modify} /> */}
+          <Stack.Screen name="My files" component={MyFiles} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />

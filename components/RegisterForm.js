@@ -3,10 +3,12 @@ import React from 'react';
 import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
-import {PropTypes} from 'prop-types';
+import PropTypes from 'prop-types';
+import {useState} from 'react';
 
-const RegisterForm = ({setToggleRegister, visible, onClose}) => {
+const RegisterForm = ({visible, onClose}) => {
   const {postUser, checkUsername} = useUser();
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const {
     control,
     handleSubmit,
@@ -24,11 +26,14 @@ const RegisterForm = ({setToggleRegister, visible, onClose}) => {
       const registerResult = await postUser(registerData);
       console.log('registeration result', registerResult);
       Alert.alert('Success', registerResult.message);
-      setToggleRegister(false);
+      setRegistrationSuccess(true);
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
+  if (registrationSuccess) {
+    onClose();
+  }
 
   return (
     <Modal
@@ -51,11 +56,13 @@ const RegisterForm = ({setToggleRegister, visible, onClose}) => {
           <Controller
             control={control}
             rules={{
+              required: {value: true, message: 'is required'},
               minLength: {value: 3, message: 'min length is 3 characters'},
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 placeholder="Full name"
+                rules={{required: {value: true, message: 'is required'}}}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
