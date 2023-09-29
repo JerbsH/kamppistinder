@@ -1,5 +1,5 @@
 import { Modal, Text, Button, Card, Input, Layout, Image} from '@ui-kitten/components';
-import { Alert } from 'react-native';
+import { Alert} from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import { appId, placeholderImage } from '../utils/app-config';
@@ -15,7 +15,8 @@ const Upload = ({ visible, onClose, navigation }) => {
   const [image, setImage] = useState(placeholderImage);
   const { postMedia, loading } = useMedia();
   const { postTag } = useTag();
-  const [type, setType] = useState('image')
+  const [type, setType] = useState('image');
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const {
     control,
@@ -59,6 +60,7 @@ const Upload = ({ visible, onClose, navigation }) => {
       );
       console.log('postTag', tagResponse);
       setUpdate(!update);
+      setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
         {
           text: 'Ok',
@@ -79,6 +81,10 @@ const Upload = ({ visible, onClose, navigation }) => {
     setType('image');
     reset();
   };
+
+  if (uploadSuccess) {
+    onClose();
+  }
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -131,6 +137,8 @@ const Upload = ({ visible, onClose, navigation }) => {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
+                multiline={true}
+
                 placeholder="Description (10 characters min.)"
                 onBlur={onBlur}
                 onChangeText={onChange}
