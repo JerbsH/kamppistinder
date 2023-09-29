@@ -6,8 +6,9 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
-import { useMedia } from '../hooks/ApiHooks';
+import { useFavourite, useMedia } from '../hooks/ApiHooks';
 import { mediaUrl } from '../utils/app-config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
@@ -27,16 +28,32 @@ const SwipeCards = () => {
     extrapolate: 'clamp',
   });
 
+  // trying to make swipes like files
+  const [userLike, setUserLike] = useState(false);
+  const {postFavourite} = useFavourite();
+
+
   const handleGestureEvent = Animated.event(
     [{ nativeEvent: { translationX: translateX } }],
     { useNativeDriver: false }
   );
   // Handle the swipe gesture
-  const handleSwipe = ({ nativeEvent }) => {
+  const handleSwipe = async ({ nativeEvent }) => {
     const { state, translationX, velocityX } = nativeEvent;
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
+
+        const token = await AsyncStorage.getItem('userToken');
+        console.log(currentMedia.file_id);
+        console.log(token);
+        try {
+          await postFavourite({file_id: currentMedia.file_id}, token);
+          setUserLike(true);
+        } catch (error) {
+          console.error(error.message);
+        }
+
         Animated.timing(translateX, {
           toValue: width,
           duration: 400,

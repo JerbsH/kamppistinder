@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import React, {useContext} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../views/Login';
-import { MainContext } from '../contexts/MainContext';
+import {MainContext} from '../contexts/MainContext';
 import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
-import { Icon } from '@ui-kitten/components';
-import { StyleSheet } from 'react-native';
+import {Icon} from '@ui-kitten/components';
+import {StyleSheet} from 'react-native';
 import MyFiles from '../views/MyFiles';
 import SwipeCards from '../views/SwipeCards';
 
@@ -72,23 +72,23 @@ const Tabscreen = () => {
           headerTitleAlign: 'center',
         }}
       />
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarIcon: homeIcon,
-            tabBarActiveTintColor: '#000',
-            tabBarActiveBackgroundColor: '#ffa575',
-            tabBarInactiveTintColor: '#000',
-            headerTitleAlign: 'center',
-          }}
-        />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: homeIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ffa575',
+          tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
+        }}
+      />
     </Tab.Navigator>
   );
 };
 
 const Stackscreen = () => {
-  const { isLoggedIn } = useContext(MainContext);
+  const {isLoggedIn} = useContext(MainContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
@@ -96,7 +96,7 @@ const Stackscreen = () => {
           <Stack.Screen
             name="Tabs"
             component={Tabscreen}
-            options={{ headerShown: false }}
+            options={{headerShown: false}}
           />
           <Stack.Screen name="My files" component={MyFiles} />
         </>
