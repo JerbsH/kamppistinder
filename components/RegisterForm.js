@@ -4,7 +4,7 @@ import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import {useState} from 'react';
 
 const RegisterForm = ({visible, onClose}) => {
   const {postUser, checkUsername} = useUser();
@@ -61,6 +61,7 @@ const RegisterForm = ({visible, onClose}) => {
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 placeholder="Full name"
+                rules={{required: {value: true, message: 'is required'}}}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
