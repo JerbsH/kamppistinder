@@ -12,7 +12,7 @@ import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {appId, placeholderImage} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
@@ -89,9 +89,11 @@ const Upload = ({visible, onClose, navigation}) => {
     reset();
   };
 
-  if (uploadSuccess) {
-    onClose();
-  }
+  useEffect(() => {
+    if (uploadSuccess) {
+      onClose();
+    }
+  }, [uploadSuccess, onClose]);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
