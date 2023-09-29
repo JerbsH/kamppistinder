@@ -56,6 +56,7 @@ const RegisterForm = ({visible, onClose}) => {
           <Controller
             control={control}
             rules={{
+              required: {value: true, message: 'is required'},
               minLength: {value: 3, message: 'min length is 3 characters'},
             }}
             render={({field: {onChange, onBlur, value}}) => (

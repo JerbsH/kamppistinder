@@ -7,6 +7,7 @@ import List from '../components/List';
 const Home = ({navigation}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [shouldCloseUpload, setShouldCloseUpload] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const toggleUploadModal = () => {
     setUploadModalVisible(!uploadModalVisible);
@@ -19,8 +20,16 @@ const Home = ({navigation}) => {
     if (shouldCloseUpload) {
       setUploadModalVisible(false);
       setShouldCloseUpload(false);
+      setUploadSuccess(true);
     }
   }, [shouldCloseUpload]);
+
+  useEffect(() => {
+    if (uploadSuccess) {
+      setUploadSuccess(false);
+    }
+  }, [uploadSuccess]);
+
 
   return (
     // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}

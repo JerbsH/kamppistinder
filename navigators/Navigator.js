@@ -1,16 +1,17 @@
-import React, {useContext} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import Home from '../views/Home';
 import Profile from '../views/Profile';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../views/Login';
-import {MainContext} from '../contexts/MainContext';
+import { MainContext } from '../contexts/MainContext';
 import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
-import {Icon} from '@ui-kitten/components';
-import {StyleSheet} from 'react-native';
+import { Icon } from '@ui-kitten/components';
+import { StyleSheet } from 'react-native';
 import MyFiles from '../views/MyFiles';
+import SwipeCards from '../views/SwipeCards';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,9 @@ const personIcon = () => (
 );
 const messageIcon = () => (
   <Icon name="message-circle-outline" style={styles.icon} fill="#000" />
+);
+const swipeIcon = () => (
+  <Icon name="search-outline" style={styles.icon} fill="#000" />
 );
 
 const styles = StyleSheet.create({
@@ -68,12 +72,23 @@ const Tabscreen = () => {
           headerTitleAlign: 'center',
         }}
       />
+      <Tab.Screen
+        name="Swipe Cards"
+        component={SwipeCards}
+        options={{
+          tabBarIcon: swipeIcon,
+          tabBarActiveTintColor: '#000',
+          tabBarActiveBackgroundColor: '#ffa575',
+          tabBarInactiveTintColor: '#000',
+          headerTitleAlign: 'center',
+        }}
+      />
     </Tab.Navigator>
   );
 };
 
 const Stackscreen = () => {
-  const {isLoggedIn} = useContext(MainContext);
+  const { isLoggedIn } = useContext(MainContext);
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
@@ -81,11 +96,9 @@ const Stackscreen = () => {
           <Stack.Screen
             name="Tabs"
             component={Tabscreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
-          {/* <Stack.Screen name="Single" component={Single} /> */}
           <Stack.Screen name="My files" component={MyFiles} />
-          {/* <Stack.Screen name="Modify file" component={Modify} /> */}
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
