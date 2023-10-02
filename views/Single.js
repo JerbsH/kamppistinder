@@ -1,17 +1,17 @@
 import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
-import {formatDate} from '../utils/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import {ScrollView} from 'react-native';
-import {Button, Card, ListItem, Text} from '@ui-kitten/components';
-import {Image} from 'react-native-elements';
+import {Button, Card, Text} from '@ui-kitten/components';
+import {Divider, Image} from 'react-native-elements';
+import Toast from 'react-native-toast-message';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
   const [userLike, setUserLike] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const {user} = useContext(MainContext);
   const {getUserById} = useUser();
   const {postFavourite, getFavouritesById, deleteFavourite} = useFavourite();
@@ -39,25 +39,22 @@ const Single = ({route, navigation}) => {
     }
   };
 
-  // add favourite
-  const createFavourite = async () => {
-    try {
-      const token = await AsyncStorage.getItem('userToken');
-      const response = await postFavourite({file_id: fileId}, token);
-      response && setUserLike(true);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   // delete favourite
   const removeFavourite = async () => {
-    try {
-      const token = await AsyncStorage.getItem('userToken');
-      const response = await deleteFavourite(fileId, token);
-      response && setUserLike(false);
-    } catch (error) {
-      console.error(error.message);
+    if (userLike === false) {
+      setButtonDisabled(true);
+    } else {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        const response = await deleteFavourite(fileId, token);
+        response && setUserLike(false);
+        Toast.show({
+          text1: 'Like removed!',
+        });
+        setButtonDisabled(true);
+      } catch (error) {
+        console.error(error.message);
+      }
     }
   };
 
@@ -85,10 +82,7 @@ const Single = ({route, navigation}) => {
     fetchLikes();
   }, [userLike]);
 
-  const toChat = () => {
-    navigation.navigate('Chat');
-  };
-
+  const date = new Date(timeAdded);
   // Show full image and metadata
   return (
     <Card>
@@ -97,22 +91,22 @@ const Single = ({route, navigation}) => {
         resizeMode="center"
         style={{height: 300}}
       />
-      <Text>Testi</Text>
+      <Text category="h2">{title}</Text>
+      <Text>{description}</Text>
+      <Text>Time added: {date.toDateString()}</Text>
+      <Text>Added by: {owner.full_name}</Text>
       <Button
         onPress={() => {
           navigation.navigate('Chat');
         }}
+        style={{marginBottom: 5}}
       >
         Start Chatting
       </Button>
-      {/* <ListItem>
-          {userLike ? (
-            <Button onPress={removeFavourite} title={'Unlike'} />
-          ) : (
-            <Button onPress={createFavourite} title={'Like'} />
-          )}
-          <Text>Total likes: {likes.length}</Text>
-        </ListItem> */}
+      <Toast />
+      <Button onPress={removeFavourite} disabled={buttonDisabled}>
+        Remove like
+      </Button>
     </Card>
   );
 };
