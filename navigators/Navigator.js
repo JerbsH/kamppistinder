@@ -12,6 +12,7 @@ import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import MyFiles from '../views/MyFiles';
 import SwipeCards from '../views/SwipeCards';
+import Single from '../views/Single';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -99,6 +100,7 @@ const Stackscreen = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen name="My files" component={MyFiles} />
+          <Stack.Screen name="Single" component={Single} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
