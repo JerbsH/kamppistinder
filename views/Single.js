@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
-import {formatDate} from '../utils/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native';
-import {Button, Card, ListItem, Text} from '@ui-kitten/components';
+import { Card, Text } from '@ui-kitten/components';
+import ListItem from '../components/ListItem';
+
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -21,12 +21,7 @@ const Single = ({route, navigation}) => {
   const {
     title,
     description,
-    filename,
-    time_added: timeAdded,
-    user_id: userId,
-    filesize,
-    media_type: mediaType,
-    file_id: fileId,
+    filename
   } = route.params;
 
   // fetch owner info
@@ -78,28 +73,7 @@ const Single = ({route, navigation}) => {
     }
   };
 
-  // fullscreen video on landscape
-  const unlockOrientation = async () => {
-    try {
-      await ScreenOrientation.unlockAsync();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  const lockOrientation = async () => {
-    try {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP,
-      );
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    unlockOrientation();
-    lockOrientation();
     fetchOwner();
   }, []);
 
@@ -107,30 +81,17 @@ const Single = ({route, navigation}) => {
     fetchLikes();
   }, [userLike]);
 
-  // Show full image and metadata
   return (
     <ScrollView>
       <Card>
         <Card.Title>{title}</Card.Title>
-        <Card.Image
-          source={{uri: mediaUrl + filename}}
-          resizeMode="center"
-          style={{height: 300}}
-        />
+          <Card.Image
+            source={{uri: mediaUrl + filename}}
+            resizeMode="center"
+            style={{height: 300}}
+          />
         <ListItem>
           <Text>{description}</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="save" />
-          <Text>{Math.round(filesize / 1024)} kB</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="today" />
-          <Text>{formatDate(timeAdded)}</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="person" />
-          <Text>username: {owner.username}</Text>
         </ListItem>
         <ListItem>
           {userLike ? (

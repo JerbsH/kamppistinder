@@ -12,6 +12,8 @@ import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import MyFiles from '../views/MyFiles';
 import SwipeCards from '../views/SwipeCards';
+import Single from '../views/Single';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -82,7 +84,9 @@ const Tabscreen = () => {
           tabBarInactiveTintColor: '#000',
           headerTitleAlign: 'center',
         }}
+
       />
+
     </Tab.Navigator>
   );
 };
@@ -102,7 +106,9 @@ const Stackscreen = () => {
         </>
       ) : (
         <Stack.Screen name="Login" component={Login} />
-      )}
+        )}
+        <Stack.Screen name="Single" component={Single} />
+
     </Stack.Navigator>
   );
 };

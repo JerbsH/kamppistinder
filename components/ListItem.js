@@ -57,7 +57,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
       )}
       onPress={() => {
         console.log('touched!', singleMedia.title);
-        // navigation.navigate('Single', singleMedia);
+        navigation.navigate('Single', singleMedia);
       }}
     />
   );
@@ -77,5 +77,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
 
 export default ListItem;
