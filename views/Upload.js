@@ -7,7 +7,7 @@ import {
   Layout,
   Image,
 } from '@ui-kitten/components';
-import {Alert} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {appId, placeholderImage} from '../utils/app-config';
@@ -145,15 +145,17 @@ const Upload = ({visible, onClose, navigation}) => {
               minLength: {value: 10, message: 'min 10 characters'},
             }}
             render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                multiline={true}
-                placeholder="Description (10 characters min.)"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.description?.message}
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-              />
+              <ScrollView style={{maxHeight: 200}}>
+                <Input
+                  multiline={true}
+                  placeholder="Description (10 characters min.)"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.description?.message}
+                  style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                />
+              </ScrollView>
             )}
             name="description"
           />

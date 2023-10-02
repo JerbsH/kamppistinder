@@ -50,8 +50,12 @@ const ListItem = ({singleMedia, navigation, userId}) => {
   return (
     <KittenListItem
       style={styles.ListItem}
-      title={singleMedia.title}
-      description={singleMedia.description}
+      title={singleMedia.title.length > 20
+        ? singleMedia.title.slice(0, 20) + '...'
+        : singleMedia.title}
+      description={singleMedia.description.length > 100
+        ? singleMedia.description.slice(0, 100) + '...'
+        : singleMedia.description}
       accessoryLeft={() => (
         <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />
       )}

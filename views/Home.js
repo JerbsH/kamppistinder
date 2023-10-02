@@ -13,7 +13,7 @@ const Home = ({navigation}) => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const {mediaArray} = useMedia();
-  const [showList, setShowList] = useState(true); // Track when to show the list
+  const [showList, setShowList] = useState(true);
 
   const toggleUploadModal = () => {
     setUploadModalVisible(!uploadModalVisible);
@@ -86,14 +86,15 @@ const Home = ({navigation}) => {
         value={searchQuery}
       />
       {showList ? (
-        <List />
+        <List navigation={navigation}/>
       ) : (
         <ScrollView>
           {searchResults.map((item) => (
             <Card key={item.file_id}>
               <Avatar source={{uri: mediaUrl + item.filename}} />
               <Text>{item.title}</Text>
-              <Text>{item.description}</Text>
+              <Text>{item.description.length > 100 ? item.description.slice(0,100)
+              + '...' : item.description}</Text>
             </Card>
           ))}
         </ScrollView>

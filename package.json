@@ -19,7 +19,6 @@
     "@ui-kitten/eva-icons": "^5.3.1",
     "eslint-plugin-react-native": "^4.1.0",
     "expo": "~49.0.11",
-    "expo-av": "~13.4.1",
     "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
