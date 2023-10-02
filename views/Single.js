@@ -85,6 +85,10 @@ const Single = ({route, navigation}) => {
     fetchLikes();
   }, [userLike]);
 
+  const toChat = () => {
+    navigation.navigate('Chat');
+  };
+
   // Show full image and metadata
   return (
     <Card>
@@ -94,6 +98,13 @@ const Single = ({route, navigation}) => {
         style={{height: 300}}
       />
       <Text>Testi</Text>
+      <Button
+        onPress={() => {
+          navigation.navigate('Chat');
+        }}
+      >
+        Start Chatting
+      </Button>
       {/* <ListItem>
           {userLike ? (
             <Button onPress={removeFavourite} title={'Unlike'} />

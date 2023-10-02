@@ -54,11 +54,9 @@ const ListItem = ({singleMedia, navigation, userId}) => {
       )}
       onPress={() => {
           console.log('touched!', singleMedia.title);
-          console.log('ListItem navi: ', navigation);
           navigation.navigate('Single', singleMedia);
       }}
     />
-
   );
 };
 

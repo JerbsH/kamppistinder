@@ -8,7 +8,6 @@ import {MainContext} from '../contexts/MainContext';
 const List = ({navigation, myFilesOnly}) => {
   const {update, user} = useContext(MainContext);
   const {mediaArray} = useMedia(update, myFilesOnly);
-  console.log('List navi: ', navigation);
 
   return (
     <KittenList
