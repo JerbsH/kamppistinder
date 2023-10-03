@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 
-const ModifyForm = ({setToggleModify, visible, onClose, user}) => {
+const ModifyForm = ({visible, onClose, user}) => {
   const {putUser, checkUsername, getUserByToken} = useUser();
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setUser} = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -34,8 +34,8 @@ const ModifyForm = ({setToggleModify, visible, onClose, user}) => {
       Alert.alert('Success', updateResult.message);
       // päivitä käyttäjä ruudulla
       const userData = await getUserByToken(token);
-      setIsLoggedIn(userData);
-      setToggleModify(false);
+      setUser(userData);
+      onClose();
     } catch (error) {
       Alert.alert('Error', error.message);
     }
@@ -176,7 +176,6 @@ const ModifyForm = ({setToggleModify, visible, onClose, user}) => {
 
 ModifyForm.propTypes = {
   user: PropTypes.object,
-  setToggleRegister: PropTypes.func,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
 };

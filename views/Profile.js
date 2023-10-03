@@ -1,4 +1,4 @@
-import {Button, Card, Layout, Text} from '@ui-kitten/components';
+import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
 import {PropTypes} from 'prop-types';
 import {Image} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
@@ -68,9 +68,10 @@ const Profile = ({navigation}) => {
           source={{uri: avatar}}
           style={{
             width: 250,
-            height: 150,
+            height: 200,
             borderRadius: 15,
             resizeMode: 'cover',
+
           }}
         ></Image>
         <Text category="h3" style={{textAlign: 'center', marginBottom: 5}}>
@@ -85,8 +86,30 @@ const Profile = ({navigation}) => {
             justifyContent: 'center',
           }}
         >
+          <Layout
+          style= {{
+            flexDirection:'row',
+            alignItems:'center',
+          }}>
+          <Icon
+            name="person-outline"
+            fill="#000"
+            style={{width: 20, height: 20, marginRight: 5}}
+          />
           <Text style={{textAlign: 'center'}}>Username: {user.username}</Text>
-          <Text style={{textAlign: 'center'}}>Email: {user.email}</Text>
+          </Layout>
+          <Layout
+          style= {{
+            flexDirection:'row',
+            alignItems:'center',
+          }}>
+          <Icon
+            name="email-outline"
+            fill="#000"
+            style={{width: 20, height: 20, marginRight: 5}}
+          />
+          <Text style={{textAlign: 'center'}}>{user.email}</Text>
+          </Layout>
         </Card>
         <Button
           style={{borderRadius: 15, marginBottom: 5}}
