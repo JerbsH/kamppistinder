@@ -16,6 +16,7 @@ const Single = ({route, navigation}) => {
   const {getUserById} = useUser();
   const {postFavourite, getFavouritesById, deleteFavourite} = useFavourite();
   const [likes, setLikes] = useState([]);
+  const {update, setUpdate} = useContext(MainContext);
 
   const {
     title,
@@ -51,6 +52,7 @@ const Single = ({route, navigation}) => {
         Toast.show({
           text1: 'Like removed!',
         });
+        setUpdate(!update);
         setButtonDisabled(true);
       } catch (error) {
         console.error(error.message);

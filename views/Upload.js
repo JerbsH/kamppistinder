@@ -73,7 +73,7 @@ const Upload = ({visible, onClose, navigation}) => {
           text: 'Ok',
           onPress: () => {
             resetForm();
-            navigation.navigate('Home');
+            navigation.navigate('My Likes');
           },
         },
       ]);

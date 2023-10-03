@@ -1,17 +1,45 @@
 import {List as KittenList} from '@ui-kitten/components';
 import ListItem from './ListItem';
-import {useMedia} from '../hooks/ApiHooks';
+import {useFavourite, useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const List = ({navigation, myFilesOnly}) => {
   const {update, user} = useContext(MainContext);
   const {mediaArray} = useMedia(update, myFilesOnly);
+  const {getFavouritesByToken} = useFavourite();
+
+  const [favouriteMedia, setFavouriteMedia] = useState([]);
+
+  const fetchFavourites = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const listOfFavourites = await getFavouritesByToken(token);
+      setFavouriteMedia(listOfFavourites);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchFavourites();
+  }, []);
+
+  useEffect(() => {
+    fetchFavourites();
+  }, [update, favouriteMedia]);
+
+  const filteredMediaArray = mediaArray.filter((item) => {
+    return favouriteMedia
+      .map((favorite) => favorite.file_id)
+      .includes(item.file_id);
+  });
 
   return (
     <KittenList
-      data={mediaArray}
+      data={filteredMediaArray}
       renderItem={({item}) => (
         <ListItem
           navigation={navigation}

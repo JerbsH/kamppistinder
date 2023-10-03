@@ -16,11 +16,16 @@ import PropTypes from 'prop-types';
 import {useFavourite, useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 const {width} = Dimensions.get('window');
 
 const SwipeCards = () => {
   const {mediaArray} = useMedia();
+
+  const {update, setUpdate} = useContext(MainContext);
   // Initialize the index to keep track of the currently displayed card
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
@@ -35,7 +40,6 @@ const SwipeCards = () => {
     extrapolate: 'clamp',
   });
 
-  // trying to make swipes like files
   const [userLike, setUserLike] = useState(false);
   const {postFavourite} = useFavourite();
 
@@ -49,11 +53,15 @@ const SwipeCards = () => {
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
-
         const token = await AsyncStorage.getItem('userToken');
         console.log(currentMedia.file_id);
         try {
           await postFavourite({file_id: currentMedia.file_id}, token);
+          Toast.show({
+            text1: 'Post Liked',
+            topOffset: 10,
+            visibilityTime: 1000,
+          });
           setUserLike(true);
         } catch (error) {
           console.error(error.message);
@@ -74,6 +82,12 @@ const SwipeCards = () => {
         });
       } else if (translationX < -width / 2 || velocityX < -800) {
         // Swipe left
+        Toast.show({
+          type: 'error',
+          text1: 'Post Disliked',
+          topOffset: 10,
+          visibilityTime: 1000,
+        });
         Animated.timing(translateX, {
           toValue: -width,
           duration: 400,
@@ -108,6 +122,7 @@ const SwipeCards = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
+      <Toast />
       <PanGestureHandler
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleSwipe}
