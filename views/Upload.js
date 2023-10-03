@@ -181,6 +181,7 @@ const Upload = ({visible, onClose, navigation}) => {
         </Layout>
       </Card>
     </Modal>
+
   );
 };
 

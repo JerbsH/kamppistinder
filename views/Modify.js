@@ -2,21 +2,21 @@ import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia} from '../hooks/ApiHooks';
+import {useMedia, useTag} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import {mediaUrl} from '../utils/app-config';
-import { Button, Card, Input } from '@ui-kitten/components';
+import {Button, Card, Input} from '@ui-kitten/components';
+import {appId, placeholderImage} from '../utils/app-config';
+import * as ImagePicker from 'expo-image-picker';
+import {useState} from 'react';
 
 const Modify = ({navigation, route}) => {
-  const {
-    title,
-    description,
-    filename,
-    file_id: fileId,
-  } = route.params;
+  const {title, description, filename, file_id: fileId} = route.params;
   const {update, setUpdate} = useContext(MainContext);
   const {putMedia} = useMedia();
+  const [image, setImage] = useState(placeholderImage);
+  const [type, setType] = useState('image');
   const {
     control,
     reset,
@@ -42,9 +42,27 @@ const Modify = ({navigation, route}) => {
     }
   };
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setType(result.assets[0].type);
+    }
+  };
+
   return (
     <Card>
-        <Card.Image source={{uri: mediaUrl + filename}} style={styles.image} />
+      <Button
+        style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+        onPress={pickImage}
+      >
+        Choose picture
+      </Button>
       <Controller
         control={control}
         rules={{
@@ -79,17 +97,17 @@ const Modify = ({navigation, route}) => {
         name="description"
       />
       <Button
-        title="Reset"
         color={'error'}
         onPress={() => {
           reset();
         }}
-      />
+      >Reset </Button>
       <Button
         disabled={errors.description || errors.title}
-        title="Update"
         onPress={handleSubmit(updateMedia)}
-      />
+      >
+        Update
+      </Button>
     </Card>
   );
 };
