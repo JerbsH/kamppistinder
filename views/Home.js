@@ -7,7 +7,7 @@ import {useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import {ScrollView} from 'react-native';
 
-const Home = ({navigation}) => {
+const Home = ({navigation, selectedCity}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [shouldCloseUpload, setShouldCloseUpload] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -86,7 +86,7 @@ const Home = ({navigation}) => {
         value={searchQuery}
       />
       {showList ? (
-        <List navigation={navigation}/>
+        <List navigation={navigation} selectedCity={selectedCity}/>
       ) : (
         <ScrollView>
           {searchResults.map((item) => (
@@ -105,6 +105,7 @@ const Home = ({navigation}) => {
 
 Home.propTypes = {
   navigation: PropTypes.object,
+  selectedCity: PropTypes.string,
 };
 
 export default Home;

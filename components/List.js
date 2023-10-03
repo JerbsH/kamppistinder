@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 
-const List = React.memo(({navigation, myFilesOnly}) => {
+const List = React.memo(({navigation, myFilesOnly, selectedCity}) => {
   const {update, user} = useContext(MainContext);
   const {mediaArray} = useMedia(update, myFilesOnly);
 
@@ -18,6 +18,7 @@ const List = React.memo(({navigation, myFilesOnly}) => {
           navigation={navigation}
           singleMedia={item}
           userId={user.user_id}
+          selectedCity={selectedCity}
         />
       )}
     />
@@ -27,6 +28,7 @@ const List = React.memo(({navigation, myFilesOnly}) => {
 List.propTypes = {
   navigation: PropTypes.object,
   myFilesOnly: PropTypes.bool,
+  selectedCity: PropTypes.string,
 };
 
 export default List;

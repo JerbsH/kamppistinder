@@ -13,7 +13,7 @@ import {
   Divider,
 } from '@ui-kitten/components';
 
-const ListItem = ({singleMedia, navigation, userId}) => {
+const ListItem = ({singleMedia, navigation, selectedCity}) => {
   const {deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
@@ -53,6 +53,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
       title={singleMedia.title.length > 20
         ? singleMedia.title.slice(0, 20) + '...'
         : singleMedia.title}
+        selectedCity={selectedCity} // Use selectedCity here
       description={singleMedia.description.length > 100
         ? singleMedia.description.slice(0, 100) + '...'
         : singleMedia.description}
@@ -71,6 +72,7 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   userId: PropTypes.number,
+  selectedCity: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
