@@ -1,7 +1,6 @@
 import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet} from 'react-native';
 import {useContext} from 'react';
-import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
@@ -14,7 +13,6 @@ const Modify = ({navigation, route}) => {
     title,
     description,
     filename,
-    media_type: mediaType,
     file_id: fileId,
   } = route.params;
   const {update, setUpdate} = useContext(MainContext);

@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
-import {Alert, StyleSheet} from 'react-native';
+import {Alert, StyleSheet, View} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {
   Avatar,
+  Button,
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
 
@@ -57,8 +58,19 @@ const ListItem = ({singleMedia, navigation, userId}) => {
           console.log('ListItem navi: ', navigation);
           navigation.navigate('Single', singleMedia);
       }}
+      accessoryRight={() => (
+        userId === singleMedia.user_id && (
+          <View style={styles.buttonGroup}>
+            <Button onPress={deleteFile}
+            status="danger"
+            size="tiny">Delete</Button>
+            <Button onPress={modifyFile}
+          status="info"
+          size="tiny">Modify</Button>
+          </View>
+        )
+      )}
     />
-
   );
 };
 
@@ -72,9 +84,15 @@ const styles = StyleSheet.create({
   container: {
     maxHeight: 192,
   },
-  ListItem: {
+  KittenListItem: {
     width: '100%',
   },
+  buttonGroup: {
+    flexDirection: 'row',
+    marginLeft: 30,
+  }
+
+
 });
 
 export default ListItem;
