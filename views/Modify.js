@@ -1,24 +1,23 @@
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet, View, Image, ScrollView} from 'react-native';
 import {useContext} from 'react';
-import {Video} from 'expo-av';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
+import {Button, Card, Input, Text} from '@ui-kitten/components';
 import {mediaUrl} from '../utils/app-config';
-import { Button, Card, Input } from '@ui-kitten/components';
 
 const Modify = ({navigation, route}) => {
   const {
     title,
     description,
     filename,
-    media_type: mediaType,
     file_id: fileId,
   } = route.params;
   const {update, setUpdate} = useContext(MainContext);
   const {putMedia} = useMedia();
+
   const {
     control,
     reset,
@@ -39,14 +38,38 @@ const Modify = ({navigation, route}) => {
       const result = await putMedia(fileId, token, data);
       console.log('updateMedia()', result.message);
       setUpdate(!update);
+      Alert.alert(
+        'Update Successful',
+        result.message,
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Home');
+            },
+          },
+        ]
+      );
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <Card>
-        <Card.Image source={{uri: mediaUrl + filename}} style={styles.image} />
+      <View style={styles.imageContainer}>
+        <Image style={styles.image} source={{uri: mediaUrl + filename}} />
+      </View>
+      <Text
+        style={{
+          fontSize: 16,
+          color: '#777',
+          marginBottom: 8,
+          textAlign: 'center',
+          alignItems: 'center',
+        }}
+      >
+        Name
+      </Text>
       <Controller
         control={control}
         rules={{
@@ -59,49 +82,72 @@ const Modify = ({navigation, route}) => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.title?.message}
+            style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
           />
         )}
         name="title"
       />
-
+      <Text
+        style={{
+          fontSize: 16,
+          color: '#777',
+          marginBottom: 8,
+          textAlign: 'center',
+          alignItems: 'center',
+        }}
+      >
+        Description
+      </Text>
       <Controller
         control={control}
         rules={{
           minLength: {value: 10, message: 'min 10 characters'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            placeholder="Description (optional)"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.description?.message}
-          />
+          <ScrollView style={{maxHeight: 200}}>
+            <Input
+              multiline={true}
+              placeholder="Description (optional)"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.description?.message}
+              style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
+            />
+          </ScrollView>
         )}
         name="description"
       />
       <Button
-        title="Reset"
+        style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
         color={'error'}
         onPress={() => {
           reset();
         }}
-      />
+      >
+        Reset
+      </Button>
       <Button
+        style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
         disabled={errors.description || errors.title}
-        title="Update"
         onPress={handleSubmit(updateMedia)}
-      />
+      >
+        Update
+      </Button>
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    marginBottom: 15,
+    overflow: 'hidden',
+  },
   image: {
     width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginBottom: 15,
+    height: '100%',
     resizeMode: 'cover',
   },
 });
