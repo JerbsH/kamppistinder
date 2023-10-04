@@ -10,7 +10,7 @@ import {
   Select,
   SelectItem,
 } from '@ui-kitten/components';
-import {Alert, ScrollView} from 'react-native';
+import {Alert, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia, useTag} from '../hooks/ApiHooks';
@@ -129,12 +129,17 @@ const Upload = ({visible, onClose, navigation, selectedCity}) => {
   };
 
   return (
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    style={{ flex: 1 }}
+    >
     <Modal
       visible={visible}
       backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
       onBackdropPress={onClose}
       style={{width: '70%'}}
     >
+      <ScrollView>
       <Card>
         <Layout
           style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
@@ -224,7 +229,11 @@ const Upload = ({visible, onClose, navigation, selectedCity}) => {
           </Button>
         </Layout>
       </Card>
+      </ScrollView>
+
     </Modal>
+
+    </KeyboardAvoidingView>
   );
 };
 
