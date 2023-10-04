@@ -12,7 +12,6 @@ import {
   GestureHandlerRootView,
   State,
 } from 'react-native-gesture-handler';
-import PropTypes from 'prop-types';
 import {useFavourite, useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -126,8 +125,16 @@ const SwipeCards = () => {
             resizeMode="cover"
           />
           <View style={styles.cardContent}>
-            <Text style={styles.title}>{currentMedia.title}</Text>
-            <Text style={styles.description}>{currentMedia.description}</Text>
+            <Text style={styles.title}>
+              {currentMedia.title && currentMedia.title.length > 20
+                ? currentMedia.title.slice(0, 20) + '...'
+                : currentMedia.title}
+            </Text>
+            <Text style={styles.description}>
+              {currentMedia.description && currentMedia.description.length > 100
+                ? currentMedia.description.slice(0, 100) + '...'
+                : currentMedia.description}
+            </Text>
           </View>
         </Animated.View>
       </PanGestureHandler>
@@ -174,10 +181,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-SwipeCards.propTypes = {
-  navigation: PropTypes.object,
-  singleMedia: PropTypes.object,
-};
 
 export default SwipeCards;

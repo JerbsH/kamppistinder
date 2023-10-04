@@ -7,13 +7,13 @@ import {useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import {ScrollView} from 'react-native';
 
-const Home = ({navigation}) => {
+const Home = ({navigation, selectedCity}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [shouldCloseUpload, setShouldCloseUpload] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const {mediaArray} = useMedia();
-  const [showList, setShowList] = useState(true); // Track when to show the list
+  const [showList, setShowList] = useState(true);
 
   const toggleUploadModal = () => {
     setUploadModalVisible(!uploadModalVisible);
@@ -45,7 +45,6 @@ const Home = ({navigation}) => {
     }
   }, [searchQuery, mediaArray]);
 
-  console.log('home navi: ', navigation);
   return (
     <Layout style={{flex: 1}}>
       <Layout
@@ -87,14 +86,15 @@ const Home = ({navigation}) => {
         value={searchQuery}
       />
       {showList ? (
-        <List navigation={navigation}/>
+        <List navigation={navigation} selectedCity={selectedCity}/>
       ) : (
         <ScrollView>
           {searchResults.map((item) => (
             <Card key={item.file_id}>
               <Avatar source={{uri: mediaUrl + item.filename}} />
               <Text>{item.title}</Text>
-              <Text>{item.description}</Text>
+              <Text>{item.description.length > 100 ? item.description.slice(0,100)
+              + '...' : item.description}</Text>
             </Card>
           ))}
         </ScrollView>
@@ -105,6 +105,7 @@ const Home = ({navigation}) => {
 
 Home.propTypes = {
   navigation: PropTypes.object,
+  selectedCity: PropTypes.string,
 };
 
 export default Home;

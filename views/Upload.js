@@ -1,3 +1,4 @@
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Modal,
   Text,
@@ -5,25 +6,41 @@ import {
   Card,
   Input,
   Layout,
-  Image,
+  IndexPath,
+  Select,
+  SelectItem,
 } from '@ui-kitten/components';
-import {Alert} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import * as ImagePicker from 'expo-image-picker';
-import {appId, placeholderImage} from '../utils/app-config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useContext, useEffect, useState} from 'react';
 import {useMedia, useTag} from '../hooks/ApiHooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
+import {appId, placeholderImage} from '../utils/app-config';
 
-const Upload = ({visible, onClose, navigation}) => {
+const Upload = ({visible, onClose, navigation, selectedCity}) => {
   const {update, setUpdate} = useContext(MainContext);
   const [image, setImage] = useState(placeholderImage);
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
   const [type, setType] = useState('image');
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
+
+  const renderOption = (title) => <SelectItem key={title} title={title} />;
+  const cityArray = [
+    'Helsinki',
+    'Kotka',
+    'Jyväskylä',
+    'Joensuu',
+    'Turku',
+    'Tampere',
+    'Oulu',
+    'Lappeenranta',
+    'Mikkeli',
+    'Vaasa',
+  ];
 
   const {
     control,
@@ -40,6 +57,9 @@ const Upload = ({visible, onClose, navigation}) => {
 
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
+    // Extract the selected city from the dropdown
+    const selectedCity = cityArray[selectedIndex.row];
+    console.log('Selected City:', selectedCity);
     const formData = new FormData();
     formData.append('title', uploadData.title);
     formData.append('description', uploadData.description);
@@ -119,7 +139,23 @@ const Upload = ({visible, onClose, navigation}) => {
         <Layout
           style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
         >
-          <Text category="h1">Upload</Text>
+          <Text category="h1" style={{marginBottom: 16}}>
+            Upload
+          </Text>
+          <Text style={{fontSize: 18, color: '#777', marginBottom: 8}}>
+            Select City
+          </Text>
+          <Select
+            style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+            selectedIndex={selectedIndex}
+            onSelect={(index) => {
+              setType(cityArray[index.row]);
+              setSelectedIndex(index);
+            }}
+            value={cityArray[selectedIndex.row]}
+          >
+            {cityArray.map(renderOption)}
+          </Select>
 
           <Controller
             control={control}
@@ -128,7 +164,7 @@ const Upload = ({visible, onClose, navigation}) => {
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                placeholder="What city are you in ?"
+                placeholder="What is your name?"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -145,15 +181,23 @@ const Upload = ({visible, onClose, navigation}) => {
               minLength: {value: 10, message: 'min 10 characters'},
             }}
             render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                multiline={true}
-                placeholder="Description (10 characters min.)"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.description?.message}
+              <ScrollView
                 style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-              />
+              >
+                <Input
+                  multiline={true}
+                  placeholder="Description (10 characters min.)"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.description?.message}
+                  style={{
+                    width: '100%',
+                    alignSelf: 'center',
+                    marginVertical: 8,
+                  }}
+                />
+              </ScrollView>
             )}
             name="description"
           />
@@ -188,6 +232,7 @@ Upload.propTypes = {
   navigation: PropTypes.object,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
+  selectedCity: PropTypes.string,
 };
 
 export default Upload;
