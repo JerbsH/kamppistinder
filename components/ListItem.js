@@ -65,12 +65,14 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
       accessoryRight={() => (
         userId === singleMedia.user_id && (
           <View style={styles.buttonGroup}>
-            <Button onPress={deleteFile}
-            status="danger"
-            size="tiny">Delete</Button>
             <Button onPress={modifyFile}
+          style={{borderRadius: 15, marginRight: 5}}
           status="info"
           size="tiny">Modify</Button>
+            <Button onPress={deleteFile}
+            style={{borderRadius: 15, marginRight: 5}}
+            status="danger"
+            size="tiny">Delete</Button>
           </View>
         )
       )}
