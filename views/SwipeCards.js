@@ -25,7 +25,7 @@ const {width} = Dimensions.get('window');
 const SwipeCards = () => {
   const {mediaArray} = useMedia();
 
-  const {update, setUpdate} = useContext(MainContext);
+  const {update, setUpdate, user} = useContext(MainContext);
   // Initialize the index to keep track of the currently displayed card
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
@@ -108,16 +108,24 @@ const SwipeCards = () => {
     }
   };
 
+  // Filter mediaArray to exclude myfiles and render cards with that array
   useEffect(() => {
     // Reset index when mediaArray changes
-    if (mediaArray.length === 0) {
+    if (notMyMedia.length === 0) {
       setIndex(0);
     }
-  }, [mediaArray]);
+  }, [notMyMedia]);
+
+  const notMyMedia = [];
+   for (let i = 0; i < mediaArray.length; i++) {
+    if (mediaArray[i].user_id !== user.user_id) {
+      notMyMedia.push(mediaArray[i]);
+    }
+   }
 
   const currentMedia = useMemo(
-    () => mediaArray[index] || {},
-    [mediaArray, index],
+    () => notMyMedia[index] || {},
+    [notMyMedia, index],
   );
 
   return (
