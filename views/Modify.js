@@ -1,5 +1,5 @@
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet, View, Image, ScrollView} from 'react-native';
+import {Alert, StyleSheet, View, Image, ScrollView} from 'react-native';
 import {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMedia} from '../hooks/ApiHooks';
@@ -38,11 +38,22 @@ const Modify = ({navigation, route}) => {
       const result = await putMedia(fileId, token, data);
       console.log('updateMedia()', result.message);
       setUpdate(!update);
+      Alert.alert(
+        'Update Successful',
+        result.message,
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('Home');
+            },
+          },
+        ]
+      );
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <Card>
       <View style={styles.imageContainer}>
