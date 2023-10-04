@@ -45,7 +45,7 @@ const Modify = ({navigation, route}) => {
           {
             text: 'OK',
             onPress: () => {
-              navigation.navigate('Home');
+              navigation.navigate('My Likes');
             },
           },
         ]
