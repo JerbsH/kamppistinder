@@ -1,22 +1,23 @@
 import {Controller, useForm} from 'react-hook-form';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View, Image, ScrollView} from 'react-native';
 import {useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMedia, useTag} from '../hooks/ApiHooks';
+import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
+import {Button, Card, Input, Text} from '@ui-kitten/components';
 import {mediaUrl} from '../utils/app-config';
-import {Button, Card, Input} from '@ui-kitten/components';
-import {appId, placeholderImage} from '../utils/app-config';
-import * as ImagePicker from 'expo-image-picker';
-import {useState} from 'react';
 
 const Modify = ({navigation, route}) => {
-  const {title, description, filename, file_id: fileId} = route.params;
+  const {
+    title,
+    description,
+    filename,
+    file_id: fileId,
+  } = route.params;
   const {update, setUpdate} = useContext(MainContext);
   const {putMedia} = useMedia();
-  const [image, setImage] = useState(placeholderImage);
-  const [type, setType] = useState('image');
+
   const {
     control,
     reset,
@@ -42,27 +43,22 @@ const Modify = ({navigation, route}) => {
     }
   };
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setType(result.assets[0].type);
-    }
-  };
-
   return (
     <Card>
-      <Button
-        style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-        onPress={pickImage}
+      <View style={styles.imageContainer}>
+        <Image style={styles.image} source={{uri: mediaUrl + filename}} />
+      </View>
+      <Text
+        style={{
+          fontSize: 16,
+          color: '#777',
+          marginBottom: 8,
+          textAlign: 'center',
+          alignItems: 'center',
+        }}
       >
-        Choose picture
-      </Button>
+        Name
+      </Text>
       <Controller
         control={control}
         rules={{
@@ -75,34 +71,53 @@ const Modify = ({navigation, route}) => {
             onChangeText={onChange}
             value={value}
             errorMessage={errors.title?.message}
+            style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
           />
         )}
         name="title"
       />
-
+      <Text
+        style={{
+          fontSize: 16,
+          color: '#777',
+          marginBottom: 8,
+          textAlign: 'center',
+          alignItems: 'center',
+        }}
+      >
+        Description
+      </Text>
       <Controller
         control={control}
         rules={{
           minLength: {value: 10, message: 'min 10 characters'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            placeholder="Description (optional)"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.description?.message}
-          />
+          <ScrollView style={{maxHeight: 200}}>
+            <Input
+              multiline={true}
+              placeholder="Description (optional)"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              errorMessage={errors.description?.message}
+              style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
+            />
+          </ScrollView>
         )}
         name="description"
       />
       <Button
+        style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
         color={'error'}
         onPress={() => {
           reset();
         }}
-      >Reset </Button>
+      >
+        Reset
+      </Button>
       <Button
+        style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
         disabled={errors.description || errors.title}
         onPress={handleSubmit(updateMedia)}
       >
@@ -113,11 +128,15 @@ const Modify = ({navigation, route}) => {
 };
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    marginBottom: 15,
+    overflow: 'hidden',
+  },
   image: {
     width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-    marginBottom: 15,
+    height: '100%',
     resizeMode: 'cover',
   },
 });
