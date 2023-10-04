@@ -9,7 +9,7 @@ import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const List = React.memo(
-  ({navigation, myFilesOnly, selectedCity, filterMyFiles}) => {
+  ({navigation, myFilesOnly,filterMyFiles}) => {
     const {update, user} = useContext(MainContext);
     const {mediaArray} = useMedia(update, myFilesOnly);
     const {getFavouritesByToken} = useFavourite();
@@ -54,7 +54,6 @@ const List = React.memo(
             navigation={navigation}
             singleMedia={item}
             userId={user.user_id}
-            selectedCity={selectedCity}
           />
         )}
       />
@@ -65,7 +64,6 @@ const List = React.memo(
 List.propTypes = {
   navigation: PropTypes.object,
   myFilesOnly: PropTypes.bool,
-  selectedCity: PropTypes.string,
 };
 
 export default List;

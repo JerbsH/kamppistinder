@@ -11,7 +11,7 @@ import {
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
 
-const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
+const ListItem = ({singleMedia, navigation,userId}) => {
   const {deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
@@ -51,7 +51,6 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
       title={singleMedia.title.length > 20
         ? singleMedia.title.slice(0, 20) + '...'
         : singleMedia.title}
-        selectedCity={selectedCity} // Use selectedCity here
       description={singleMedia.description.length > 100
         ? singleMedia.description.slice(0, 100) + '...'
         : singleMedia.description}
@@ -68,11 +67,11 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
             <Button onPress={modifyFile}
           style={{borderRadius: 15, marginRight: 5}}
           status="info"
-          size="tiny">Modify</Button>
+          size="small">Modify</Button>
             <Button onPress={deleteFile}
             style={{borderRadius: 15, marginRight: 5}}
             status="danger"
-            size="tiny">Delete</Button>
+            size="small">Delete</Button>
           </View>
         )
       )}
@@ -84,7 +83,6 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   userId: PropTypes.number,
-  selectedCity: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

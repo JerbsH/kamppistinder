@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import {appId, placeholderImage} from '../utils/app-config';
 
-const Upload = ({visible, onClose, navigation, selectedCity}) => {
+const Upload = ({visible, onClose, navigation}) => {
   const {update, setUpdate} = useContext(MainContext);
   const [image, setImage] = useState(placeholderImage);
   const {postMedia, loading} = useMedia();
