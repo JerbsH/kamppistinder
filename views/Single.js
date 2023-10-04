@@ -5,9 +5,9 @@ import {formatDate} from '../utils/functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFavourite, useUser} from '../hooks/ApiHooks';
 import {MainContext} from '../contexts/MainContext';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import {ScrollView} from 'react-native';
 import {Button, Card, ListItem, Text} from '@ui-kitten/components';
+import {Image} from 'react-native-elements';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -16,7 +16,6 @@ const Single = ({route, navigation}) => {
   const {getUserById} = useUser();
   const {postFavourite, getFavouritesById, deleteFavourite} = useFavourite();
   const [likes, setLikes] = useState([]);
-
 
   const {
     title,
@@ -78,28 +77,7 @@ const Single = ({route, navigation}) => {
     }
   };
 
-  // fullscreen video on landscape
-  const unlockOrientation = async () => {
-    try {
-      await ScreenOrientation.unlockAsync();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  const lockOrientation = async () => {
-    try {
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP,
-      );
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    unlockOrientation();
-    lockOrientation();
     fetchOwner();
   }, []);
 
@@ -109,39 +87,22 @@ const Single = ({route, navigation}) => {
 
   // Show full image and metadata
   return (
-    <ScrollView>
-      <Card>
-        <Card.Title>{title}</Card.Title>
-        <Card.Image
-          source={{uri: mediaUrl + filename}}
-          resizeMode="center"
-          style={{height: 300}}
-        />
-        <ListItem>
-          <Text>{description}</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="save" />
-          <Text>{Math.round(filesize / 1024)} kB</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="today" />
-          <Text>{formatDate(timeAdded)}</Text>
-        </ListItem>
-        <ListItem>
-          <Icon name="person" />
-          <Text>username: {owner.username}</Text>
-        </ListItem>
-        <ListItem>
+    <Card>
+      <Image
+        source={{uri: mediaUrl + filename}}
+        resizeMode="center"
+        style={{height: 300}}
+      />
+      <Text>Testi</Text>
+      {/* <ListItem>
           {userLike ? (
             <Button onPress={removeFavourite} title={'Unlike'} />
           ) : (
             <Button onPress={createFavourite} title={'Like'} />
           )}
           <Text>Total likes: {likes.length}</Text>
-        </ListItem>
-      </Card>
-    </ScrollView>
+        </ListItem> */}
+    </Card>
   );
 };
 

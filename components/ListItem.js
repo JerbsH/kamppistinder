@@ -7,10 +7,7 @@ import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {
   Avatar,
-  Button,
-  List,
   ListItem as KittenListItem,
-  Divider,
 } from '@ui-kitten/components';
 
 const ListItem = ({singleMedia, navigation, userId}) => {
@@ -56,10 +53,12 @@ const ListItem = ({singleMedia, navigation, userId}) => {
         <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />
       )}
       onPress={() => {
-        console.log('touched!', singleMedia.title);
-        // navigation.navigate('Single', singleMedia);
+          console.log('touched!', singleMedia.title);
+          console.log('ListItem navi: ', navigation);
+          navigation.navigate('Single', singleMedia);
       }}
     />
+
   );
 };
 

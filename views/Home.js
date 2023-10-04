@@ -45,6 +45,7 @@ const Home = ({navigation}) => {
     }
   }, [searchQuery, mediaArray]);
 
+  console.log('home navi: ', navigation);
   return (
     <Layout style={{flex: 1}}>
       <Layout
@@ -86,7 +87,7 @@ const Home = ({navigation}) => {
         value={searchQuery}
       />
       {showList ? (
-        <List />
+        <List navigation={navigation}/>
       ) : (
         <ScrollView>
           {searchResults.map((item) => (
