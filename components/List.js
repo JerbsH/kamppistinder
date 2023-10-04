@@ -3,7 +3,8 @@ import { FlatList } from 'react-native';
 import ListItem from './ListItem';
 import {useFavourite, useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
-import {useContext, useEffect, useState} from 'react';
+import {List as KittenList} from '@ui-kitten/components';
+import React, {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
