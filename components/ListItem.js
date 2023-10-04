@@ -11,7 +11,7 @@ import {
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
 
-const ListItem = ({singleMedia, navigation,userId}) => {
+const ListItem = ({singleMedia, navigation, userId}) => {
   const {deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
@@ -47,33 +47,45 @@ const ListItem = ({singleMedia, navigation,userId}) => {
 
   return (
     <KittenListItem
-      title={singleMedia.title.length > 20
-        ? singleMedia.title.slice(0, 20) + '...'
-        : singleMedia.title}
-      description={singleMedia.description.length > 100
-        ? singleMedia.description.slice(0, 100) + '...'
-        : singleMedia.description}
+      title={
+        singleMedia.title.length > 20
+          ? singleMedia.title.slice(0, 20) + '...'
+          : singleMedia.title
+      }
+      description={
+        singleMedia.description.length > 100
+          ? singleMedia.description.slice(0, 100) + '...'
+          : singleMedia.description
+      }
       accessoryLeft={() => (
         <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />
       )}
       onPress={() => {
-          console.log('touched!', singleMedia.title);
-          navigation.navigate('Single', singleMedia);
+        console.log('touched!', singleMedia.title);
+        navigation.navigate('Single', singleMedia);
       }}
-      accessoryRight={() => (
+      accessoryRight={() =>
         userId === singleMedia.user_id && (
           <>
-            <Button onPress={modifyFile}
-          style={{borderRadius: 15, marginRight: 5}}
-          status="info"
-          size="medium">Modify</Button>
-            <Button onPress={deleteFile}
-            style={{borderRadius: 15, marginRight: 5}}
-            status="danger"
-            size="medium">Delete</Button>
+            <Button
+              onPress={modifyFile}
+              style={{borderRadius: 15, marginRight: 5}}
+              status="info"
+              size="medium"
+            >
+              Modify
+            </Button>
+            <Button
+              onPress={deleteFile}
+              style={{borderRadius: 15, marginRight: 5}}
+              status="danger"
+              size="medium"
+            >
+              Delete
+            </Button>
           </>
         )
-      )}
+      }
     />
   );
 };
@@ -83,6 +95,5 @@ ListItem.propTypes = {
   navigation: PropTypes.object,
   userId: PropTypes.number,
 };
-
 
 export default ListItem;
