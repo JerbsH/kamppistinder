@@ -68,11 +68,11 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
             <Button onPress={modifyFile}
           style={{borderRadius: 15, marginRight: 5}}
           status="info"
-          size="tiny">Modify</Button>
+          size="small">Modify</Button>
             <Button onPress={deleteFile}
             style={{borderRadius: 15, marginRight: 5}}
             status="danger"
-            size="tiny">Delete</Button>
+            size="small">Delete</Button>
           </View>
         )
       )}
