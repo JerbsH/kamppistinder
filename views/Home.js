@@ -45,7 +45,6 @@ const Home = ({navigation}) => {
     }
   }, [searchQuery, mediaArray]);
 
-  console.log('home navi: ', navigation);
   return (
     <Layout style={{flex: 1}}>
       <Layout
