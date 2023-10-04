@@ -17,8 +17,8 @@ import Single from '../views/Single';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const homeIcon = () => (
-  <Icon name="home-outline" style={styles.icon} fill="#000" />
+const heartIcon = () => (
+  <Icon name="heart-outline" style={styles.icon} fill="#000" />
 );
 const personIcon = () => (
   <Icon name="person-outline" style={styles.icon} fill="#000" />
@@ -74,10 +74,10 @@ const Tabscreen = () => {
         }}
       />
       <Tab.Screen
-        name="Home"
+        name="My Likes"
         component={Home}
         options={{
-          tabBarIcon: homeIcon,
+          tabBarIcon: heartIcon,
           tabBarActiveTintColor: '#000',
           tabBarActiveBackgroundColor: '#ffa575',
           tabBarInactiveTintColor: '#000',

@@ -75,7 +75,7 @@ const Profile = ({navigation}) => {
           }}
         ></Image>
         <Text category="h3" style={{textAlign: 'center', marginBottom: 5}}>
-          {user.username}
+          {user.full_name}
         </Text>
         <Card
           style={{
