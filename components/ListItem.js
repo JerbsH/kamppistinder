@@ -11,7 +11,7 @@ import {
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
 
-const ListItem = ({singleMedia, navigation, selectedCity}) => {
+const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
   const {deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
