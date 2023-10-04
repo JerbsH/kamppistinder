@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {mediaUrl} from '../utils/app-config';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert} from 'react-native';
 import {useMedia} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
@@ -11,7 +11,7 @@ import {
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
 
-const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
+const ListItem = ({singleMedia, navigation,userId}) => {
   const {deleteMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
 
@@ -47,11 +47,9 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
 
   return (
     <KittenListItem
-      style={styles.ListItem}
       title={singleMedia.title.length > 20
         ? singleMedia.title.slice(0, 20) + '...'
         : singleMedia.title}
-        selectedCity={selectedCity} // Use selectedCity here
       description={singleMedia.description.length > 100
         ? singleMedia.description.slice(0, 100) + '...'
         : singleMedia.description}
@@ -64,16 +62,16 @@ const ListItem = ({singleMedia, navigation, selectedCity, userId}) => {
       }}
       accessoryRight={() => (
         userId === singleMedia.user_id && (
-          <View style={styles.buttonGroup}>
+          <>
             <Button onPress={modifyFile}
           style={{borderRadius: 15, marginRight: 5}}
           status="info"
-          size="small">Modify</Button>
+          size="medium">Modify</Button>
             <Button onPress={deleteFile}
             style={{borderRadius: 15, marginRight: 5}}
             status="danger"
-            size="small">Delete</Button>
-          </View>
+            size="medium">Delete</Button>
+          </>
         )
       )}
     />
@@ -84,22 +82,7 @@ ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
   userId: PropTypes.number,
-  selectedCity: PropTypes.string,
 };
 
-const styles = StyleSheet.create({
-  container: {
-    maxHeight: 192,
-  },
-  KittenListItem: {
-    width: '100%',
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    marginLeft: 30,
-  }
-
-
-});
 
 export default ListItem;
