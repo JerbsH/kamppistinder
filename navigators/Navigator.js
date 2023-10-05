@@ -14,6 +14,7 @@ import MyFiles from '../views/MyFiles';
 import SwipeCards from '../views/SwipeCards';
 import Single from '../views/Single';
 import Modify from '../views/Modify';
+import Comments from '../views/Comments';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -103,6 +104,7 @@ const Stackscreen = () => {
           <Stack.Screen name="My files" component={MyFiles} />
           <Stack.Screen name="Single" component={Single} />
           <Stack.Screen name="Modify file" component={Modify} />
+          <Stack.Screen name="Comments" component={Comments}/>
 
         </>
       ) : (

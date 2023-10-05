@@ -7,6 +7,7 @@ import {MainContext} from '../contexts/MainContext';
 import {Button, Card, Text} from '@ui-kitten/components';
 import {Divider, Image} from 'react-native-elements';
 import Toast from 'react-native-toast-message';
+import Comments from './Comments';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -99,7 +100,7 @@ const Single = ({route, navigation}) => {
       <Text>Added by: {owner.full_name}</Text>
       <Button
         onPress={() => {
-          navigation.navigate('Chat');
+          navigation.navigate('Comments', {fileId});
         }}
         style={{marginBottom: 5}}
       >
@@ -109,6 +110,7 @@ const Single = ({route, navigation}) => {
       <Button onPress={removeFavourite} disabled={buttonDisabled}>
         Remove like
       </Button>
+
     </Card>
   );
 };
