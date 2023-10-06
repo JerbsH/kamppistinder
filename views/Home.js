@@ -6,14 +6,16 @@ import List from '../components/List';
 import {useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import {ScrollView} from 'react-native';
+import MapPicker from '../components/MapPicker';
 
-const Home = ({navigation, selectedCity}) => {
+const Home = ({navigation}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [shouldCloseUpload, setShouldCloseUpload] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const {mediaArray} = useMedia();
   const [showList, setShowList] = useState(true);
+  const [selectedCoordinate, setSelectedCoordinate] = useState(null);
 
   const toggleUploadModal = () => {
     setUploadModalVisible(!uploadModalVisible);
@@ -45,8 +47,16 @@ const Home = ({navigation, selectedCity}) => {
     }
   }, [searchQuery, mediaArray]);
 
+  const handleLocationSelect = (coordinate) => {
+    // Store the coordinate wherever you need it
+    setSelectedCoordinate(coordinate);
+    console.log('Storing Coordinates:', coordinate);
+  };
+
   return (
     <Layout style={{flex: 1}}>
+      <MapPicker
+      onLocationSelect={handleLocationSelect} />
       <Layout
         style={{
           flexDirection: 'row',
@@ -86,15 +96,18 @@ const Home = ({navigation, selectedCity}) => {
         value={searchQuery}
       />
       {showList ? (
-        <List navigation={navigation} selectedCity={selectedCity}/>
+        <List navigation={navigation} />
       ) : (
         <ScrollView>
           {searchResults.map((item) => (
             <Card key={item.file_id}>
               <Avatar source={{uri: mediaUrl + item.filename}} />
               <Text>{item.title}</Text>
-              <Text>{item.description.length > 100 ? item.description.slice(0,100)
-              + '...' : item.description}</Text>
+              <Text>
+                {item.description.length > 100
+                  ? item.description.slice(0, 100) + '...'
+                  : item.description}
+              </Text>
             </Card>
           ))}
         </ScrollView>
@@ -105,7 +118,6 @@ const Home = ({navigation, selectedCity}) => {
 
 Home.propTypes = {
   navigation: PropTypes.object,
-  selectedCity: PropTypes.string,
 };
 
 export default Home;
