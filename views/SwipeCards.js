@@ -1,38 +1,24 @@
-import React, {useState, useEffect, useMemo, useRef} from 'react';
-import {
-  Animated,
-  StyleSheet,
-  Dimensions,
-  Text,
-  View,
-  Image,
-} from 'react-native';
-import {
-  PanGestureHandler,
-  GestureHandlerRootView,
-  State,
-} from 'react-native-gesture-handler';
-import {useFavourite, useMedia} from '../hooks/ApiHooks';
-import {mediaUrl} from '../utils/app-config';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Animated, StyleSheet, Dimensions, Text, View, Image } from 'react-native';
+import { PanGestureHandler, GestureHandlerRootView, State } from 'react-native-gesture-handler';
+import { useFavourite, useMedia } from '../hooks/ApiHooks';
+import { mediaUrl } from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import {useContext} from 'react';
-import {MainContext} from '../contexts/MainContext';
+import { useContext } from 'react';
+import { MainContext } from '../contexts/MainContext';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const SwipeCards = () => {
-  const {mediaArray} = useMedia();
+  const { mediaArray } = useMedia();
+  const { update, setUpdate, user } = useContext(MainContext);
 
-  const {update, setUpdate, user} = useContext(MainContext);
-  // Initialize the index to keep track of the currently displayed card
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
-
   const translateX = useMemo(() => new Animated.Value(0), []);
-  // for tracking swipes right
+
   const swipesRef = useRef(0);
-  // rotating card when swiping left/right
   const rotate = translateX.interpolate({
     inputRange: [-width / 2, width / 2],
     outputRange: ['-30deg', '30deg'],
@@ -40,22 +26,21 @@ const SwipeCards = () => {
   });
 
   const [userLike, setUserLike] = useState(false);
-  const {postFavourite} = useFavourite();
+  const { postFavourite } = useFavourite();
 
   const handleGestureEvent = Animated.event(
-    [{nativeEvent: {translationX: translateX}}],
-    {useNativeDriver: false},
+    [{ nativeEvent: { translationX: translateX } }],
+    { useNativeDriver: false }
   );
-  // Handle the swipe gesture
-  const handleSwipe = async ({nativeEvent}) => {
-    const {state, translationX, velocityX} = nativeEvent;
+
+  const handleSwipe = async ({ nativeEvent }) => {
+    const { state, translationX, velocityX } = nativeEvent;
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
         const token = await AsyncStorage.getItem('userToken');
-        console.log(currentMedia.file_id);
         try {
-          await postFavourite({file_id: currentMedia.file_id}, token);
+          await postFavourite({ file_id: currentMedia.file_id }, token);
           Toast.show({
             text1: 'Post Liked',
             topOffset: 10,
@@ -73,7 +58,6 @@ const SwipeCards = () => {
         }).start(() => {
           const favouriteId = currentMedia.file_id;
           console.log('swipe right, fileId:', favouriteId);
-          // Increment the index and cycle back to 0 if at the end
           setIndex((prevIndex) => (prevIndex + 1) % numMedia);
           translateX.setValue(0);
           swipesRef.current += 1;
@@ -107,25 +91,15 @@ const SwipeCards = () => {
     }
   };
 
-  // Filter mediaArray to exclude myfiles and render cards with that array
   useEffect(() => {
-    // Reset index when mediaArray changes
     if (notMyMedia.length === 0) {
       setIndex(0);
     }
   }, [notMyMedia]);
 
-  const notMyMedia = [];
-   for (let i = 0; i < mediaArray.length; i++) {
-    if (mediaArray[i].user_id !== user.user_id) {
-      notMyMedia.push(mediaArray[i]);
-    }
-   }
+  const notMyMedia = mediaArray.filter(item => item.user_id !== user.user_id);
 
-  const currentMedia = useMemo(
-    () => notMyMedia[index] || {},
-    [notMyMedia, index],
-  );
+  const currentMedia = useMemo(() => notMyMedia[index] || {}, [notMyMedia, index]);
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -138,12 +112,12 @@ const SwipeCards = () => {
           style={[
             styles.card,
             {
-              transform: [{translateX}, {rotate}],
+              transform: [{ translateX }, { rotate }],
             },
           ]}
         >
           <Image
-            source={{uri: mediaUrl + currentMedia.filename}}
+            source={{ uri: mediaUrl + currentMedia.filename }}
             style={styles.image}
             resizeMode="cover"
           />

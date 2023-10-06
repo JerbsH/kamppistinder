@@ -89,13 +89,6 @@ const Upload = ({visible, onClose, navigation}) => {
       setUpdate(!update);
       setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
-        {
-          text: 'Ok',
-          onPress: () => {
-            resetForm();
-            navigation.navigate('My Likes');
-          },
-        },
       ]);
     } catch (error) {
       console.log(error.message);

@@ -23,9 +23,9 @@ const MapPicker = ({ onLocationSelect }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{height: 200}}>
       <MapView
-        style={{flex: 1, height: 300}}
+        style={{ flex: 1 }}
         onPress={handleMapPress}
         initialRegion={{
           latitude: 60.1695,

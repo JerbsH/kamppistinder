@@ -1,24 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {Layout, Text, Button, Card, Input, Avatar} from '@ui-kitten/components';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Layout, Text, Button, Card, Input, Avatar } from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import Upload from './Upload';
 import List from '../components/List';
-import {useMedia} from '../hooks/ApiHooks';
-import {mediaUrl} from '../utils/app-config';
-import {ScrollView} from 'react-native';
+import { useMedia } from '../hooks/ApiHooks';
+import { mediaUrl } from '../utils/app-config';
+import { ScrollView } from 'react-native';
 import MapPicker from '../components/MapPicker';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [shouldCloseUpload, setShouldCloseUpload] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const {mediaArray} = useMedia();
+  const { mediaArray } = useMedia();
   const [showList, setShowList] = useState(true);
   const [selectedCoordinate, setSelectedCoordinate] = useState(null);
 
   const toggleUploadModal = () => {
-    setUploadModalVisible(!uploadModalVisible);
+    setUploadModalVisible((prevVisible) => !prevVisible);
   };
 
   const uploadSuccessCallback = () => {
@@ -29,7 +29,7 @@ const Home = ({navigation}) => {
     if (shouldCloseUpload) {
       setUploadModalVisible(false);
       setShouldCloseUpload(false);
-      setUploadSuccess(true);
+      // setUploadSuccess(true);
     }
   }, [shouldCloseUpload]);
 
@@ -47,16 +47,14 @@ const Home = ({navigation}) => {
     }
   }, [searchQuery, mediaArray]);
 
-  const handleLocationSelect = (coordinate) => {
-    // Store the coordinate wherever you need it
+  const handleLocationSelect = useCallback((coordinate) => {
     setSelectedCoordinate(coordinate);
     console.log('Storing Coordinates:', coordinate);
-  };
+  }, []);
 
   return (
-    <Layout style={{flex: 1}}>
-      <MapPicker
-      onLocationSelect={handleLocationSelect} />
+    <Layout style={{ flex: 1 }}>
+      <MapPicker onLocationSelect={handleLocationSelect} />
       <Layout
         style={{
           flexDirection: 'row',
@@ -66,14 +64,11 @@ const Home = ({navigation}) => {
           marginHorizontal: 16,
         }}
       >
-        <Button
-          onPress={toggleUploadModal}
-          style={{flex: 1, marginHorizontal: 5}}
-        >
+        <Button onPress={toggleUploadModal} style={{ flex: 1, marginHorizontal: 5 }}>
           Make a post
         </Button>
         <Button
-          style={{flex: 1, marginHorizontal: 5}}
+          style={{ flex: 1, marginHorizontal: 5 }}
           onPress={() => {
             navigation.navigate('My files');
           }}
@@ -90,7 +85,7 @@ const Home = ({navigation}) => {
         />
       )}
       <Input
-        style={{borderWidth: 1, padding: 8}}
+        style={{ borderWidth: 1, padding: 8 }}
         placeholder="Search..."
         onChangeText={setSearchQuery}
         value={searchQuery}
@@ -101,7 +96,7 @@ const Home = ({navigation}) => {
         <ScrollView>
           {searchResults.map((item) => (
             <Card key={item.file_id}>
-              <Avatar source={{uri: mediaUrl + item.filename}} />
+              <Avatar source={{ uri: mediaUrl + item.filename }} />
               <Text>{item.title}</Text>
               <Text>
                 {item.description.length > 100
