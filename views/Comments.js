@@ -1,25 +1,29 @@
-import React, { useState } from 'react';
+import React, {useContext, useState } from 'react';
 import { useComment, useUser } from '../hooks/ApiHooks';
 import { Divider } from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, Card, Input, Layout, Text } from '@ui-kitten/components';
-import { Image } from 'react-native';
+import { Image, KeyboardAvoidingView } from 'react-native';
 import { mediaUrl } from '../utils/app-config';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import {MainContext} from '../contexts/MainContext';
 
-const Comments = ({ route }) => {
+
+const Comments = ({route}) => {
   const { postComment, getCommentsById, deleteComment } = useComment();
-  const { user } = useUser();
   const [comments, setComments] = useState([]);
   const [userComments, setUserComments] = useState('');
   const singleMedia = route.params;
+  const {getUserById} = useUser();
+  const {user} = useContext(MainContext);
 
 
 useEffect(() => {
   fetchComments();
-}, [userComments]);
+  setUsername();
+}, []);
 
 
   const fetchComments = async () => {
@@ -33,9 +37,26 @@ useEffect(() => {
     }
   };
 
+  const setUsername = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    const commentsData = await getCommentsById(singleMedia.file_id, token);
+    console.log('length', commentsData.length);
+    try {
+      for (let i = 0; i < commentsData.length; i++) {
+        const id = commentsData[i].user_id;
+        const user = await getUserById(id, token);
+        commentsData[i].user = user.username;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+    setComments(commentsData);
+  };
+
   // Handle submitting a new comment
   const handleCommentSubmit = async () => {
     if (userComments.trim() === '') {
+      alert('Comment can not be blank!');
       return;
     }
     try {
@@ -45,9 +66,11 @@ useEffect(() => {
         userComments,
         token,
       );
+
       if (response) {
         setUserComments(''); //Clear the comment input
         fetchComments();
+        setUsername();
       };
     } catch (error) {
       console.error('Error posting comment:', error);
@@ -60,56 +83,79 @@ useEffect(() => {
       const token = await AsyncStorage.getItem('userToken');
       await deleteComment(commentId, token);
       fetchComments();
+      setUsername();
     } catch (error) {
       console.error('Error deleting comment:', error);
     }
   };
 
   return (
-    <Card>
-      <Divider />
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    style={{ flex: 1 }}
+    >
+    <Card style={{ margin: 10 }}>
       {singleMedia && (
         <Layout>
           <Image
             source={{ uri: mediaUrl + singleMedia.filename }}
-            resizeMode="center"
-            style={{ height: 300 }}
+            resizeMode="cover"
+            style={{ height: 300 , marginBottom: 10}}
           />
-          <Text>Title: {singleMedia.title}</Text>
-          <Text>Description: {singleMedia.description}</Text>
+          <Text category="h5">{singleMedia.title}</Text>
+          <Text>{singleMedia.description}</Text>
         </Layout>
       )}
-      <Divider />
-      <Text>Comments:</Text>
+      <Text category="h6" style={{ marginTop: 10 }}>
+        Comments:
+      </Text>
       {comments.map((comment) => (
-        <Layout key={comment.comment_id}>
-          <Layout style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text>{comment.comment}</Text>
-            {user && user.user_id === comment.user_id && (
+        <Layout key={comment.comment_id} style={{ marginTop: 10 }}>
+          <Layout
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text>{comment.comment} Added by: {comment.user}</Text>
+            {user.user_id === comment.user_id && (
               <Button
+                appearance="ghost"
+                status="danger"
                 onPress={() => handleCommentDelete(comment.comment_id)}>
                 Delete
               </Button>
             )}
           </Layout>
-          <Divider></Divider>
         </Layout>
       ))}
       <Input
         value={userComments}
         onChangeText={(text) => setUserComments(text)}
         placeholder="Add a comment..."
+        style={{ marginTop: 10 }}
       />
-      <Button onPress={handleCommentSubmit}>Submit</Button>
+      <Button
+        onPress={handleCommentSubmit}
+        appearance="outline"
+        style={{ marginTop: 10 }}>
+        Submit
+      </Button>
     </Card>
+    </KeyboardAvoidingView>
   );
 };
 
 Comments.propTypes = {
   route: PropTypes.object,
+  user: PropTypes.object,
 };
 
 export default Comments;
+
+
+
+
 
 
 
