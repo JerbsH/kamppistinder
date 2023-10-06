@@ -12,7 +12,7 @@ const { width } = Dimensions.get('window');
 
 const SwipeCards = () => {
   const { mediaArray } = useMedia();
-  const { update, setUpdate, user } = useContext(MainContext);
+  const { user } = useContext(MainContext);
 
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
