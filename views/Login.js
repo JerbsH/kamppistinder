@@ -1,4 +1,4 @@
-import {Button, Layout, Text, Divider} from '@ui-kitten/components';
+import {Button, Layout, Divider} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import {useContext, useState, useEffect} from 'react';
 import {MainContext} from '../contexts/MainContext';

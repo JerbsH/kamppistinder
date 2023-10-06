@@ -230,4 +230,38 @@ const useFavourite = () => {
   };
 };
 
-export {useMedia, useAuthentication, useUser, useTag, useFavourite};
+
+
+
+
+
+const useComment = () => {
+  const postComment = async (id, comment, token) => {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': token,
+        },
+        body: JSON.stringify({ comment, file_id: id}),
+      };
+      return await doFetch(apiUrl + 'comments', options);
+    };
+
+    const getCommentsById = async (id) => {
+      return await doFetch(apiUrl + 'comments/file/' + id)
+    };
+
+    const deleteComment = async (id, token) => {
+      const options = {
+        method: 'DELETE',
+        headers: {
+          'x-access-token': token,
+      },
+    };
+    return await doFetch(apiUrl + 'comments/' + id, options);
+    };
+    return {postComment, getCommentsById, deleteComment}
+  };
+
+export {useMedia, useAuthentication, useUser, useTag, useFavourite, useComment};
