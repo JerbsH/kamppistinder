@@ -5,7 +5,7 @@ App for students to search for appartments and roommates. Swipe through posts an
 
 ## Installation
 
-Clone the project to a folder ```git clone https://github.com/JerbsH/kamppistinder``` and run ```npm install ```
+Clone the project to a folder ```git clone https://github.com/JerbsH/kamppistinder``` and run ```npm install```
 
 ## Features
 
