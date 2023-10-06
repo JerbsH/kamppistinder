@@ -7,6 +7,7 @@ import { Image } from 'react-native';
 import { mediaUrl } from '../utils/app-config';
 import { useEffect } from 'react';
 import {formatDate} from '../utils/functions';
+import PropTypes from 'prop-types';
 
 
 const Comments = ({ singleMedia, userId }) => {
@@ -16,15 +17,16 @@ const Comments = ({ singleMedia, userId }) => {
   const [userComments, setUserComments] = useState('');
 
 
+
 useEffect(() => {
   fetchComments();
 }, [userComments]);
 
-useEffect(() => {
+/* useEffect(() => {
   fetchOwner();
-}, []);
+}, []); */
 
-// fetch owner info
+/* // fetch owner info
 const fetchOwner = async () => {
   try {
     const token = await AsyncStorage.getItem('userToken');
@@ -33,7 +35,7 @@ const fetchOwner = async () => {
   } catch (error) {
     console.error(error.message);
   }
-};
+}; */
 
   const fetchComments = async () => {
     try {
@@ -45,7 +47,6 @@ const fetchOwner = async () => {
       console.error('Error fetching comments:', error);
     }
   };
-
 
   // Handle submitting a new comment
   const handleCommentSubmit = async () => {
@@ -69,9 +70,6 @@ const fetchOwner = async () => {
     }
   };
 
-
-
-
   // Handle deleting a comment
   const handleCommentDelete = async (commentId) => {
     try {
@@ -82,8 +80,10 @@ const fetchOwner = async () => {
       console.error('Error deleting comment:', error);
     }
   };
-return (
-  <Card>
+  console.log(singleMedia);
+
+  return (
+    <Card>
       <Divider />
       {comments.map((comment) => (
         <Layout key={comment.comment_id}>
@@ -91,23 +91,26 @@ return (
             <Text>{comment.comment}</Text>
             {user.user_id === comment.user_id && (
               <Button
-              onPress={() => handleCommentDelete(comment.comment_id)}>Delete</Button>
-              )}
+                onPress={() => handleCommentDelete(comment.comment_id)}>
+                Delete
+              </Button>
+            )}
           </Layout>
         </Layout>
       ))}
       <Divider />
-      <Layout>
-      <Image
-        source={{uri: mediaUrl + singleMedia.filename}}
-        resizeMode="center"
-        style={{height: 300}}
-        />
-        <Text>Title: {singleMedia.title}</Text>
-        <Text>Description: {singleMedia.description}</Text>
-        <Text>Time added: {singleMedia.formatDate}</Text>
-      <Text>Added by: {username}</Text>
-      </Layout>
+      {singleMedia && (
+        <Layout>
+          <Image
+            source={{ uri: mediaUrl + singleMedia.filename }}
+            resizeMode="center"
+            style={{ height: 300 }}
+          />
+          <Text>Title: {singleMedia.title}</Text>
+          <Text>Description: {singleMedia.description}</Text>
+          {/* <Text>Added by: {username}</Text> */}
+        </Layout>
+      )}
       <Divider />
       <Text>Comments:</Text>
       <Input
@@ -120,10 +123,11 @@ return (
   );
 };
 
-/* Comments.propTypes = {
+Comments.propTypes = {
   singleMedia: PropTypes.object,
-  userId: PropTypes.number,
-}; */
+  userId: PropTypes.object,
+};
+
 
 export default Comments;
 

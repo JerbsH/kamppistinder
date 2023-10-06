@@ -100,7 +100,7 @@ const Single = ({route, navigation}) => {
       <Text>Added by: {owner.full_name}</Text>
       <Button
         onPress={() => {
-          navigation.navigate('Comments', {fileId});
+          navigation.navigate('Comments', {singleMedia: route.params});
         }}
         style={{marginBottom: 5}}
       >
@@ -110,6 +110,7 @@ const Single = ({route, navigation}) => {
       <Button onPress={removeFavourite} disabled={buttonDisabled}>
         Remove like
       </Button>
+
 
     </Card>
   );
