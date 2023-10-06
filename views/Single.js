@@ -100,7 +100,7 @@ const Single = ({route, navigation}) => {
       <Text>Added by: {owner.full_name}</Text>
       <Button
         onPress={() => {
-          navigation.navigate('Comments', {singleMedia: route.params});
+          navigation.navigate('Comments', route.params);
         }}
         style={{marginBottom: 5}}
       >

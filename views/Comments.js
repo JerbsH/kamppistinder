@@ -6,36 +6,21 @@ import { Button, Card, Input, Layout, Text } from '@ui-kitten/components';
 import { Image } from 'react-native';
 import { mediaUrl } from '../utils/app-config';
 import { useEffect } from 'react';
-import {formatDate} from '../utils/functions';
 import PropTypes from 'prop-types';
 
 
-const Comments = ({ singleMedia, userId }) => {
+const Comments = ({ route }) => {
   const { postComment, getCommentsById, deleteComment } = useComment();
   const { user } = useUser();
   const [comments, setComments] = useState([]);
   const [userComments, setUserComments] = useState('');
-
+  const singleMedia = route.params;
 
 
 useEffect(() => {
   fetchComments();
 }, [userComments]);
 
-/* useEffect(() => {
-  fetchOwner();
-}, []); */
-
-/* // fetch owner info
-const fetchOwner = async () => {
-  try {
-    const token = await AsyncStorage.getItem('userToken');
-    const ownerData = await getUserById(userId, token);
-    setOwner(ownerData);
-  } catch (error) {
-    console.error(error.message);
-  }
-}; */
 
   const fetchComments = async () => {
     try {
@@ -53,7 +38,6 @@ const fetchOwner = async () => {
     if (userComments.trim() === '') {
       return;
     }
-
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postComment(
@@ -80,24 +64,9 @@ const fetchOwner = async () => {
       console.error('Error deleting comment:', error);
     }
   };
-  console.log(singleMedia);
 
   return (
     <Card>
-      <Divider />
-      {comments.map((comment) => (
-        <Layout key={comment.comment_id}>
-          <Layout style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text>{comment.comment}</Text>
-            {user.user_id === comment.user_id && (
-              <Button
-                onPress={() => handleCommentDelete(comment.comment_id)}>
-                Delete
-              </Button>
-            )}
-          </Layout>
-        </Layout>
-      ))}
       <Divider />
       {singleMedia && (
         <Layout>
@@ -108,26 +77,41 @@ const fetchOwner = async () => {
           />
           <Text>Title: {singleMedia.title}</Text>
           <Text>Description: {singleMedia.description}</Text>
-          {/* <Text>Added by: {username}</Text> */}
         </Layout>
       )}
       <Divider />
       <Text>Comments:</Text>
+      {comments.map((comment) => (
+        <Layout key={comment.comment_id}>
+          <Layout style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>{comment.comment}</Text>
+            {user && user.user_id === comment.user_id && (
+              <Button
+                onPress={() => handleCommentDelete(comment.comment_id)}>
+                Delete
+              </Button>
+            )}
+          </Layout>
+          <Divider></Divider>
+        </Layout>
+      ))}
       <Input
         value={userComments}
         onChangeText={(text) => setUserComments(text)}
         placeholder="Add a comment..."
       />
-      <Button title="Submit" onPress={handleCommentSubmit} />
+      <Button onPress={handleCommentSubmit}>Submit</Button>
     </Card>
   );
 };
 
 Comments.propTypes = {
-  singleMedia: PropTypes.object,
-  userId: PropTypes.object,
+  route: PropTypes.object,
 };
 
-
 export default Comments;
+
+
+
+
 
