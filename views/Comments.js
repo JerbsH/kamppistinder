@@ -1,30 +1,26 @@
-import React, {useContext, useState } from 'react';
-import { useComment, useUser } from '../hooks/ApiHooks';
-import { Divider } from 'react-native-elements';
+import React, {useContext, useState} from 'react';
+import {useComment, useUser} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, Card, Input, Layout, Text } from '@ui-kitten/components';
-import { Image, KeyboardAvoidingView } from 'react-native';
-import { mediaUrl } from '../utils/app-config';
-import { useEffect } from 'react';
+import {Button, Card, Divider, Input, Layout, Text} from '@ui-kitten/components';
+import {Image, KeyboardAvoidingView, ScrollView} from 'react-native';
+import {mediaUrl} from '../utils/app-config';
+import {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import {MainContext} from '../contexts/MainContext';
 
-
 const Comments = ({route}) => {
-  const { postComment, getCommentsById, deleteComment } = useComment();
+  const {postComment, getCommentsById, deleteComment} = useComment();
   const [comments, setComments] = useState([]);
   const [userComments, setUserComments] = useState('');
   const singleMedia = route.params;
   const {getUserById} = useUser();
   const {user} = useContext(MainContext);
 
-
-useEffect(() => {
-  fetchComments();
-  setUsername();
-}, []);
-
+  useEffect(() => {
+    fetchComments();
+    setUsername();
+  }, []);
 
   const fetchComments = async () => {
     try {
@@ -71,7 +67,7 @@ useEffect(() => {
         setUserComments(''); //Clear the comment input
         fetchComments();
         setUsername();
-      };
+      }
     } catch (error) {
       console.error('Error posting comment:', error);
     }
@@ -91,57 +87,70 @@ useEffect(() => {
 
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
+      style={{flex: 1}}
     >
-    <Card style={{ margin: 10 }}>
-      {singleMedia && (
-        <Layout>
-          <Image
-            source={{ uri: mediaUrl + singleMedia.filename }}
-            resizeMode="cover"
-            style={{ height: 300 , marginBottom: 10}}
-          />
-          <Text category="h5">{singleMedia.title}</Text>
-          <Text>{singleMedia.description}</Text>
-        </Layout>
-      )}
-      <Text category="h6" style={{ marginTop: 10 }}>
-        Comments:
-      </Text>
-      {comments.map((comment) => (
-        <Layout key={comment.comment_id} style={{ marginTop: 10 }}>
-          <Layout
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text>{comment.comment} Added by: {comment.user}</Text>
-            {user.user_id === comment.user_id && (
-              <Button
-                appearance="ghost"
-                status="danger"
-                onPress={() => handleCommentDelete(comment.comment_id)}>
-                Delete
-              </Button>
-            )}
+      <ScrollView>
+      <Card style={{margin: 10}}>
+        {singleMedia && (
+          <Layout>
+            <Image
+              source={{uri: mediaUrl + singleMedia.filename}}
+              resizeMode="cover"
+              style={{height: 300, marginBottom: 10}}
+            />
+            <Text category="h5">{singleMedia.title}</Text>
+            <Text style= {{marginBottom: 10}}>{singleMedia.description}</Text>
           </Layout>
-        </Layout>
-      ))}
-      <Input
-        value={userComments}
-        onChangeText={(text) => setUserComments(text)}
-        placeholder="Add a comment..."
-        style={{ marginTop: 10 }}
-      />
-      <Button
-        onPress={handleCommentSubmit}
-        appearance="outline"
-        style={{ marginTop: 10 }}>
-        Submit
-      </Button>
-    </Card>
+        )}
+        <Divider/>
+        <Text category="h6" style={{marginTop: 10, marginBottom: 10}}>
+          Comments:
+        </Text>
+
+        {comments.map((comment) => (
+          <Layout key={comment.comment_id} style={{marginTop: 10}}>
+            <Layout
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text>
+                <Text category="s1" style={{fontWeight: 'bold'}}>
+                  {comment.user}
+                </Text>
+                {': '}
+                {comment.comment}
+              </Text>
+              {user.user_id === comment.user_id && (
+                <Button
+                  appearance="outline"
+                  status="danger"
+                  onPress={() => handleCommentDelete(comment.comment_id)}
+                >
+                  Delete
+                </Button>
+              )}
+            </Layout>
+          </Layout>
+        ))}
+        <Input
+          value={userComments}
+          onChangeText={(text) => setUserComments(text)}
+          placeholder="Add a comment..."
+          style={{marginTop: 10}}
+        />
+        <Button
+          onPress={handleCommentSubmit}
+          appearance="outline"
+          style={{marginTop: 10}}
+        >
+          Submit
+        </Button>
+      </Card>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -152,12 +161,3 @@ Comments.propTypes = {
 };
 
 export default Comments;
-
-
-
-
-
-
-
-
-

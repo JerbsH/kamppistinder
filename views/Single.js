@@ -91,27 +91,34 @@ const Single = ({route, navigation}) => {
     <Card>
       <Image
         source={{uri: mediaUrl + filename}}
-        resizeMode="center"
-        style={{height: 300}}
+        resizeMode="cover"
+        style={{height: 300, marginBottom: 10}}
       />
-      <Text category="h2">{title}</Text>
-      <Text>{description}</Text>
+      <Text category="h2"style={{ marginVertical: 10 }}>{title}</Text>
+      <Text style={{ marginBottom: 10 }}>{description}</Text>
+      <Divider />
       <Text>Time added: {date.toDateString()}</Text>
       <Text>Added by: {owner.full_name}</Text>
       <Button
+        appearance="outline"
         onPress={() => {
           navigation.navigate('Comments', route.params);
         }}
-        style={{marginBottom: 5}}
+        style={{ marginVertical: 10 }}
       >
         Start Chatting
       </Button>
       <Toast />
-      <Button onPress={removeFavourite} disabled={buttonDisabled}>
+      <Button
+        appearance="outline"
+        status="danger"
+        onPress={removeFavourite}
+        disabled={buttonDisabled}
+        style={{ marginVertical: 10 }}
+
+      >
         Remove like
       </Button>
-
-
     </Card>
   );
 };
