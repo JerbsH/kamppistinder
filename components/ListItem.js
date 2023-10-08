@@ -68,6 +68,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
         userId === singleMedia.user_id && (
           <>
             <Button
+              appearance={'outline'}
               onPress={modifyFile}
               style={{borderRadius: 15, marginRight: 5}}
               status="info"
@@ -76,6 +77,7 @@ const ListItem = ({singleMedia, navigation, userId}) => {
               Modify
             </Button>
             <Button
+            appearance={'outline'}
               onPress={deleteFile}
               style={{borderRadius: 15, marginRight: 5}}
               status="danger"
