@@ -32,7 +32,7 @@ const Upload = ({visible, onClose, navigation}) => {
     mode: 'onBlur',
   });
 
-  const upload = async (uploadData, selectedCoordinate) => {
+  const upload = async (uploadData) => {
     console.log('upload', uploadData);
     console.log('Selected Coordinates:', selectedCoordinate);
     // Extract the selected city from the dropdown
@@ -58,6 +58,7 @@ const Upload = ({visible, onClose, navigation}) => {
         {
           file_id: response.file_id,
           tag: appId,
+          location: selectedCoordinate,
         },
         token,
       );
@@ -104,11 +105,6 @@ const Upload = ({visible, onClose, navigation}) => {
     }
   };
 
-  const handleLocationSelect = useCallback((coordinate) => {
-    setSelectedCoordinate(coordinate);
-    console.log('Storing Coordinates:', coordinate);
-  }, []);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -120,9 +116,9 @@ const Upload = ({visible, onClose, navigation}) => {
         onBackdropPress={onClose}
         style={{width: '70%'}}
       >
-        {/* Include MapPicker with GooglePlacesAutocomplete */}
-        <MapPicker onLocationSelect={handleLocationSelect} />
-
+        <MapPicker
+          onSelectCoordinate={(coordinate) => setSelectedCoordinate(coordinate)}
+        />
         <ScrollView>
           <Card>
             <Layout
@@ -204,8 +200,7 @@ const Upload = ({visible, onClose, navigation}) => {
                 loading={loading}
                 disabled={errors.description || errors.title}
                 onPress={() =>
-                  handleSubmit((data) => upload(data, selectedCoordinate))
-                }
+                  handleSubmit(upload)}
               >
                 Upload
               </Button>
