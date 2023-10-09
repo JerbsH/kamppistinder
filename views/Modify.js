@@ -69,7 +69,11 @@ const Modify = ({navigation, route}) => {
             const token = await AsyncStorage.getItem('userToken');
             const result = await deleteMedia(fileId, token);
             console.log('deleteFile()', result.message);
+<<<<<<< HEAD
             setUpdate(update);
+=======
+            setUpdate(!update);
+>>>>>>> 46f85ddd50a7a185ae8fbe0f2df466524a12c316
             // navigate back after deleting a file
             navigation.goBack();
           } catch (error) {

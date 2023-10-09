@@ -5,8 +5,9 @@ import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import {useState} from 'react';
+import { useEffect } from 'react';
 
-const RegisterForm = ({visible, onClose}) => {
+const RegisterForm = ({visible, onClose, onSuccess}) => {
   const {postUser, checkUsername} = useUser();
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const {
@@ -26,14 +27,16 @@ const RegisterForm = ({visible, onClose}) => {
       const registerResult = await postUser(registerData);
       console.log('registeration result', registerResult);
       Alert.alert('Success', registerResult.message);
-      setRegistrationSuccess(true);
+      onSuccess();
     } catch (error) {
       Alert.alert('Error', error.message);
     }
   };
-  if (registrationSuccess) {
-    onClose();
-  }
+  useEffect(() => {
+    if (registrationSuccess) {
+      onClose();
+    }
+  }, [registrationSuccess, onClose]);
 
   return (
     <Modal
