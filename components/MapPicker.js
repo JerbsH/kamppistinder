@@ -3,6 +3,7 @@ import {View, StyleSheet, FlatList, Text} from 'react-native';
 import {Input, Button} from '@ui-kitten/components/ui';
 import MapView from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import googleMapsApiKey from '../utils/apiKey';
 
 const MapPicker = ({onLocationSelect}) => {
   const [selectedCoordinate, setSelectedCoordinate] = useState(null);
@@ -95,7 +96,7 @@ const MapPicker = ({onLocationSelect}) => {
         placeholder="Search for a city"
         onPress={handleItemSelect}
         query={{
-          key: 'AIzaSyArMzb3iykSAAzky-smqGDTWLOSKglN1k0',
+          key: googleMapsApiKey,
           language: 'en',
         }}
         nearbyPlacesAPI="GooglePlacesSearch"
