@@ -18,6 +18,7 @@ const Upload = ({visible, onClose, navigation}) => {
   const [type, setType] = useState('image');
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [selectedCoordinate, setSelectedCoordinate] = useState(null);
+  const {selectedCity, setSelectedCity} = useContext(MainContext);
 
   const {
     control,
@@ -37,8 +38,9 @@ const Upload = ({visible, onClose, navigation}) => {
     console.log('Selected Coordinates:', selectedCoordinate);
     // Extract the selected city from the dropdown
     const formData = new FormData();
-    formData.append('title', uploadData.title);
+    formData.append('title', `${uploadData.title}, ${selectedCity}`);
     formData.append('description', uploadData.description);
+    console.log(formData);
     const filename = image.split('/').pop();
 
     let fileExtension = filename.split('.').pop();
@@ -58,7 +60,6 @@ const Upload = ({visible, onClose, navigation}) => {
         {
           file_id: response.file_id,
           tag: appId,
-          location: selectedCoordinate,
         },
         token,
       );
@@ -76,7 +77,6 @@ const Upload = ({visible, onClose, navigation}) => {
       ]);
     } catch (error) {
       console.log(error.message);
-      // TODO: notify user about failed upload
     }
   };
 
@@ -199,8 +199,7 @@ const Upload = ({visible, onClose, navigation}) => {
                 style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
                 loading={loading}
                 disabled={errors.description || errors.title}
-                onPress={() =>
-                  handleSubmit(upload)}
+                onPress={handleSubmit(upload)}
               >
                 Upload
               </Button>
