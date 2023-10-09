@@ -16,7 +16,7 @@ const Modify = ({navigation, route}) => {
     file_id: fileId,
   } = route.params;
   const {update, setUpdate} = useContext(MainContext);
-  const {putMedia} = useMedia();
+  const {putMedia, deleteMedia} = useMedia();
 
   const {
     control,
@@ -54,6 +54,32 @@ const Modify = ({navigation, route}) => {
       console.error(error);
     }
   };
+  const deleteFile = async () => {
+    Alert.alert('Delete', `file id: ${fileId}, Are you sure?`, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'Ok',
+        onPress: async () => {
+          console.log('deleting file', fileId);
+          try {
+            const token = await AsyncStorage.getItem('userToken');
+            const result = await deleteMedia(fileId, token);
+            console.log('deleteFile()', result.message);
+            // navigate back after deleting a file
+            navigation.goBack();
+          } catch (error) {
+            console.error(error);
+          }
+        },
+      },
+    ]);
+  };
+
+
   return (
     <Card>
       <View style={styles.imageContainer}>
@@ -133,6 +159,14 @@ const Modify = ({navigation, route}) => {
         onPress={handleSubmit(updateMedia)}
       >
         Update
+      </Button>
+      <Button
+        style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
+        appearance={'outline'}
+        onPress={deleteFile}
+        status="danger"
+      >
+        Delete
       </Button>
     </Card>
   );
