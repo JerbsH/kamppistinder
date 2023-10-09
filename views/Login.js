@@ -46,7 +46,7 @@ const Login = ({navigation}) => {
     width: '40%',
   };
   const registerSuccessCallback = () => {
-    setShouldCloseRegisterForm(true);
+    setIsRegisterFormVisible(false);
   };
   useEffect(() => {
     if (shouldCloseRegisterForm) {

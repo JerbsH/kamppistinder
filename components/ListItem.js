@@ -5,7 +5,6 @@ import {
   Button,
   ListItem as KittenListItem,
 } from '@ui-kitten/components';
-import {TouchableOpacity} from 'react-native';
 
 const ListItem = ({singleMedia, navigation, userId}) => {
   const modifyFile = async () => {
@@ -35,19 +34,16 @@ const ListItem = ({singleMedia, navigation, userId}) => {
       accessoryRight={() =>
         userId === singleMedia.user_id && (
           <>
-            <TouchableOpacity
+
+            <Button
+              appearance={'outline'}
               onPress={modifyFile}
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+              style={{borderRadius: 15, marginRight: 5}}
+              status="info"
+              size="medium"
             >
-              <Button
-                appearance={'outline'}
-                style={{borderRadius: 15, marginRight: 5}}
-                status="info"
-                size="medium"
-              >
-                Modify
-              </Button>
-            </TouchableOpacity>
+              Modify
+            </Button>
           </>
         )
       }
