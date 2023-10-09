@@ -65,17 +65,6 @@ const Tabscreen = () => {
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Upload}
-        options={{
-          tabBarIcon: messageIcon,
-          tabBarActiveTintColor: '#000',
-          tabBarActiveBackgroundColor: '#ffa575',
-          tabBarInactiveTintColor: '#000',
-          headerTitleAlign: 'center',
-        }}
-      />
-      <Tab.Screen
         name="My Likes"
         component={Home}
         options={{
