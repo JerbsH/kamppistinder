@@ -17,7 +17,6 @@ const Upload = ({visible, onClose, navigation}) => {
   const {postTag} = useTag();
   const [type, setType] = useState('image');
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [selectedCoordinate, setSelectedCoordinate] = useState(null);
   const {selectedCity, setSelectedCity} = useContext(MainContext);
 
   const {
@@ -35,10 +34,8 @@ const Upload = ({visible, onClose, navigation}) => {
 
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
-    console.log('Selected Coordinates:', selectedCoordinate);
-    // Extract the selected city from the dropdown
     const formData = new FormData();
-    formData.append('title', `${uploadData.title}, ${selectedCity}`);
+    formData.append('title', `${uploadData.title}, ${selectedCity.split(',')[0].trim()}`);
     formData.append('description', uploadData.description);
     console.log(formData);
     const filename = image.split('/').pop();
@@ -116,9 +113,7 @@ const Upload = ({visible, onClose, navigation}) => {
         onBackdropPress={onClose}
         style={{width: '70%'}}
       >
-        <MapPicker
-          onSelectCoordinate={(coordinate) => setSelectedCoordinate(coordinate)}
-        />
+        <MapPicker/>
         <ScrollView>
           <Card>
             <Layout

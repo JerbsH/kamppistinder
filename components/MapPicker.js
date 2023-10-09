@@ -8,15 +8,19 @@ const MapPicker = () => {
   return (
     <GooglePlacesAutocomplete
       query={{
-        placeholder: 'Select city',
+        types: '(cities)',
         key: googleMapsApiKey,
         language: 'en',
         components: 'country:fi',
       }}
       onPress={(data, details = null) => {
-        setSelectedCity(data.description);
+        setSelectedCity(details.description);
         // 'details' is provided when fetchDetails = true
         console.log(data, details);
+      }}
+      textInputProps={{
+        placeholder: 'Type your city',
+
       }}
     />
   );
