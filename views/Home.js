@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Layout, Text, Button, Card, Input, Avatar} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import Upload from './Upload';
@@ -6,7 +6,6 @@ import List from '../components/List';
 import {useMedia} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import {ScrollView} from 'react-native';
-import MapPicker from '../components/MapPicker';
 
 const Home = ({navigation}) => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
@@ -15,10 +14,9 @@ const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const {mediaArray} = useMedia();
   const [showList, setShowList] = useState(true);
-  const [selectedCoordinate, setSelectedCoordinate] = useState(null);
 
   const toggleUploadModal = () => {
-    setUploadModalVisible((prevVisible) => !prevVisible);
+    setUploadModalVisible(!uploadModalVisible);
   };
 
   const uploadSuccessCallback = () => {
@@ -47,14 +45,9 @@ const Home = ({navigation}) => {
     }
   }, [searchQuery, mediaArray]);
 
-  const handleLocationSelect = useCallback((coordinate) => {
-    setSelectedCoordinate(coordinate);
-    console.log('Storing Coordinates:', coordinate);
-  }, []);
 
   return (
     <Layout style={{flex: 1}}>
-      <MapPicker onLocationSelect={handleLocationSelect} />
       <Layout
         style={{
           flexDirection: 'row',

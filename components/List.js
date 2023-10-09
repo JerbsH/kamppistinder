@@ -44,7 +44,7 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
   });
 
   return (
-    <KittenList style={{ maxHeight: 300 }}
+    <KittenList
       data={usableData}
       renderItem={({ item }) => (
         <ListItem

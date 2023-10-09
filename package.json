@@ -33,6 +33,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-file-access": "^3.0.4",
     "react-native-gesture-handler": "^2.13.1",
+    "react-native-google-places-autocomplete": "^2.5.5",
     "react-native-image-picker": "^7.0.0",
     "react-native-maps": "^1.7.1",
     "react-native-permissions": "^3.9.2",
