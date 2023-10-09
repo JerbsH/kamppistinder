@@ -6,4 +6,5 @@ const placeholderImage = 'https://place-hold.it/300x200&text=Choose';
 
 const appId = 'BootlegTinder2';
 
+
 export {apiUrl, mediaUrl, placeholderImage, appId};
