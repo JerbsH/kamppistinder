@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, Dimensions, Text, View, Image } from 'react-native';
+import { Animated, StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native';
 import { PanGestureHandler, GestureHandlerRootView, State } from 'react-native-gesture-handler';
-import { useFavourite, useMedia } from '../hooks/ApiHooks';
+import { useFavourite, useMedia} from '../hooks/ApiHooks';
 import { mediaUrl } from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
@@ -11,8 +11,22 @@ import { MainContext } from '../contexts/MainContext';
 const { width } = Dimensions.get('window');
 
 const SwipeCards = () => {
-  const { mediaArray } = useMedia();
+  const { mediaArray, loadMedia} = useMedia();
   const { user } = useContext(MainContext);
+
+  const [myFilesOnly, setMyFilesOnly] = useState(false);
+  const handleRefresh = async () => {
+    console.log('Refreshing...');
+    try {
+      await loadMedia(myFilesOnly ? user.user_id : 0);
+
+      setIndex(0);
+      translateX.setValue(0);
+      swipesRef.current = 0;
+    } catch (error) {
+      console.error('Refresh failed', error);
+    }
+  };
 
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
@@ -104,6 +118,11 @@ const SwipeCards = () => {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Toast />
+
+      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
+        <Text style={styles.refreshButtonText}>Refresh</Text>
+      </TouchableOpacity>
+
       <PanGestureHandler
         onGestureEvent={handleGestureEvent}
         onHandlerStateChange={handleSwipe}
@@ -177,6 +196,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
   },
+  refreshButton: {
+    backgroundColor: '#ffa575', // Example background color
+    paddingVertical: 10, // Adjust the height of the button
+    paddingHorizontal: 20, // Adjust the width of the button
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10, // Add some margin to create spacing
+  },
+  refreshButtonText: {
+    color: 'black', // Text color
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default SwipeCards;
