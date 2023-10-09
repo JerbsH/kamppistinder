@@ -58,7 +58,6 @@ const Upload = ({visible, onClose, navigation}) => {
         {
           file_id: response.file_id,
           tag: appId,
-          location: selectedCoordinate,
         },
         token,
       );
@@ -199,8 +198,7 @@ const Upload = ({visible, onClose, navigation}) => {
                 style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
                 loading={loading}
                 disabled={errors.description || errors.title}
-                onPress={() =>
-                  handleSubmit(upload)}
+                onPress={handleSubmit(upload)}
               >
                 Upload
               </Button>
