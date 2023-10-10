@@ -30,8 +30,8 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
   }, []);
 
   useEffect(() => {
-    // Update favourites every 3 seconds
-    const intervalId = setInterval(fetchFavourites, 3000);
+    // Update favourites every 2 seconds
+    const intervalId = setInterval(fetchFavourites, 2000);
 
     return () => clearInterval(intervalId);
   }, []);

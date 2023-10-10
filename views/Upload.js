@@ -96,7 +96,7 @@ const Upload = ({visible, onClose, navigation}) => {
       aspect: [4, 3],
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
       setType(result.assets[0].type);
     }
