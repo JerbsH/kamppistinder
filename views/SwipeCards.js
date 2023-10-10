@@ -26,6 +26,16 @@ const SwipeCards = () => {
   const {mediaArray, loadMedia} = useMedia();
   const {user} = useContext(MainContext);
 
+  // Reset notMyMedia when refreshing
+  const resetNotMyMedia = () => {
+    notMyMedia = mediaArray.filter((item) => {
+      return (
+        !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
+        item.user_id !== user.user_id
+      );
+    });
+  };
+
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
@@ -33,6 +43,7 @@ const SwipeCards = () => {
       setIndex(0);
       translateX.setValue(0);
       swipesRef.current = 0;
+      resetNotMyMedia();
     } catch (error) {
       console.error('Refresh failed', error);
     }
@@ -156,37 +167,46 @@ const SwipeCards = () => {
         <Text style={styles.refreshButtonText}>Refresh</Text>
       </TouchableOpacity>
 
-      <PanGestureHandler
-        onGestureEvent={handleGestureEvent}
-        onHandlerStateChange={handleSwipe}
-      >
-        <Animated.View
-          style={[
-            styles.card,
-            {
-              transform: [{translateX}, {rotate}],
-            },
-          ]}
+      {notMyMedia.length > 0 ? (
+        <PanGestureHandler
+          onGestureEvent={handleGestureEvent}
+          onHandlerStateChange={handleSwipe}
         >
-          <Image
-            source={{uri: mediaUrl + currentMedia.filename}}
-            style={styles.image}
-            resizeMode="cover"
-          />
-          <View style={styles.cardContent}>
-            <Text style={styles.title}>
-              {currentMedia.title && currentMedia.title.length > 20
-                ? currentMedia.title.slice(0, 20) + '...'
-                : currentMedia.title}
-            </Text>
-            <Text style={styles.description}>
-              {currentMedia.description && currentMedia.description.length > 100
-                ? currentMedia.description.slice(0, 100) + '...'
-                : currentMedia.description}
-            </Text>
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
+          <Animated.View
+            style={[
+              styles.card,
+              {
+                transform: [{translateX}, {rotate}],
+              },
+            ]}
+          >
+            <Image
+              source={{uri: mediaUrl + currentMedia.filename}}
+              style={styles.image}
+              resizeMode="cover"
+            />
+            <View style={styles.cardContent}>
+              <Text style={styles.title}>
+                {currentMedia.title && currentMedia.title.length > 20
+                  ? currentMedia.title.slice(0, 20) + '...'
+                  : currentMedia.title}
+              </Text>
+              <Text style={styles.description}>
+                {currentMedia.description &&
+                currentMedia.description.length > 100
+                  ? currentMedia.description.slice(0, 100) + '...'
+                  : currentMedia.description}
+              </Text>
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
+      ) : (
+        <View style={styles.noMediaContainer}>
+          <Text style={styles.noMediaText}>
+            No more media to display
+          </Text>
+        </View>
+      )}
     </GestureHandlerRootView>
   );
 };
@@ -243,6 +263,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  noMediaContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noMediaText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
+
 
 export default SwipeCards;
