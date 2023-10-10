@@ -25,12 +25,10 @@ const {width} = Dimensions.get('window');
 const SwipeCards = () => {
   const {mediaArray, loadMedia} = useMedia();
   const {user} = useContext(MainContext);
-  const [myFilesOnly, setMyFilesOnly] = useState(false);
 
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
-      const mediaData = await loadMedia(myFilesOnly ? user.user_id : 0);
       fetchFavourites();
       setIndex(0);
       translateX.setValue(0);
@@ -40,8 +38,35 @@ const SwipeCards = () => {
     }
   };
 
+  const [favouriteMedia, setFavouriteMedia] = useState([]);
+  const fetchFavourites = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const listOfFavourites = await getFavouritesByToken(token);
+      setFavouriteMedia(listOfFavourites);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchFavourites();
+  }, []);
+
+  console.log('favourites:', favouriteMedia);
+  console.log('favourite length', favouriteMedia.length);
+
+  // const notMyMedia = mediaArray.filter((item) => item.user_id !== user.user_id);
+  let notMyMedia = mediaArray.filter((item) => {
+    // Check if the item is not in the favoriteMedia list
+    return (
+      !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
+      item.user_id !== user.user_id
+    );
+  });
+
+  console.log('notMyMedia length', notMyMedia.length);
+
   const [index, setIndex] = useState(0);
-  const numMedia = mediaArray.length;
   const translateX = useMemo(() => new Animated.Value(0), []);
 
   const swipesRef = useRef(0);
@@ -84,7 +109,7 @@ const SwipeCards = () => {
         }).start(() => {
           const favouriteId = currentMedia.file_id;
           console.log('swipe right, fileId:', favouriteId);
-          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
+          setIndex((prevIndex) => (prevIndex + 1) % notMyMedia.length);
           translateX.setValue(0);
           swipesRef.current += 1;
           console.log('swipe right', swipesRef);
@@ -102,7 +127,7 @@ const SwipeCards = () => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
+          setIndex((prevIndex) => (prevIndex + 1) % notMyMedia.length);
           translateX.setValue(0);
         });
       } else {
@@ -114,28 +139,9 @@ const SwipeCards = () => {
           useNativeDriver: true,
         }).start();
       }
+      fetchFavourites();
     }
   };
-
-  const [favouriteMedia, setFavouriteMedia] = useState([]);
-  const fetchFavourites = async () => {
-    try {
-      const token = await AsyncStorage.getItem('userToken');
-      const listOfFavourites = await getFavouritesByToken(token);
-      setFavouriteMedia(listOfFavourites);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-  useEffect(() => {
-    fetchFavourites();
-  }, []);
-
-  console.log('favourites:', favouriteMedia);
-  console.log('favourite length', favouriteMedia.length);
-
-  const notMyMedia = mediaArray.filter((item) => item.user_id !== user.user_id);
-  console.log('notMyMedia length', notMyMedia.length);
 
   const currentMedia = useMemo(
     () => notMyMedia[index] || {},

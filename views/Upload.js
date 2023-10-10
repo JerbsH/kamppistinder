@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Modal, Text, Button, Card, Input, Layout} from '@ui-kitten/components';
 import {Alert, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
@@ -35,7 +35,10 @@ const Upload = ({visible, onClose, navigation}) => {
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
     const formData = new FormData();
-    formData.append('title', `${uploadData.title}, ${selectedCity.split(',')[0].trim()}`);
+    formData.append(
+      'title',
+      `${uploadData.title}, ${selectedCity.split(',')[0].trim()}`,
+    );
     formData.append('description', uploadData.description);
     console.log(formData);
     const filename = image.split('/').pop();
@@ -96,7 +99,7 @@ const Upload = ({visible, onClose, navigation}) => {
       aspect: [4, 3],
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
       setType(result.assets[0].type);
     }
@@ -113,7 +116,7 @@ const Upload = ({visible, onClose, navigation}) => {
         onBackdropPress={onClose}
         style={{width: '70%'}}
       >
-        <MapPicker/>
+        <MapPicker />
         <ScrollView>
           <Card>
             <Layout
