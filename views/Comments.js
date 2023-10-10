@@ -33,7 +33,6 @@ const Comments = ({route}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const commentsData = await getCommentsById(singleMedia.file_id, token);
-      console.log('Comments data:', commentsData); // for debugging
       setComments(commentsData);
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -43,7 +42,6 @@ const Comments = ({route}) => {
   const setUsername = async () => {
     const token = await AsyncStorage.getItem('userToken');
     const commentsData = await getCommentsById(singleMedia.file_id, token);
-    console.log('length', commentsData.length);
     try {
       for (let i = 0; i < commentsData.length; i++) {
         const id = commentsData[i].user_id;
@@ -173,7 +171,6 @@ const Comments = ({route}) => {
 
 Comments.propTypes = {
   route: PropTypes.object,
-  user: PropTypes.object,
 };
 
 export default Comments;

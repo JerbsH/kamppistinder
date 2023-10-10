@@ -8,7 +8,6 @@ import {
 
 const ListItem = ({singleMedia, navigation, userId}) => {
   const modifyFile = async () => {
-    console.log('modifying file', singleMedia.file_id);
     navigation.navigate('Modify file', singleMedia);
   };
 
@@ -28,21 +27,20 @@ const ListItem = ({singleMedia, navigation, userId}) => {
         <Avatar source={{uri: mediaUrl + singleMedia.thumbnails.w160}} />
       )}
       onPress={() => {
-        console.log('touched!', singleMedia.title);
         navigation.navigate('Single', singleMedia);
       }}
       accessoryRight={() =>
         userId === singleMedia.user_id && (
           <>
-              <Button
-                onPress={modifyFile}
-                appearance={'outline'}
-                style={{borderRadius: 15, marginRight: 5}}
-                status="info"
-                size="medium"
-              >
-                Modify
-              </Button>
+            <Button
+              onPress={modifyFile}
+              appearance={'outline'}
+              style={{borderRadius: 15, marginRight: 5}}
+              status="info"
+              size="medium"
+            >
+              Modify
+            </Button>
           </>
         )
       }

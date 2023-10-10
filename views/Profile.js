@@ -1,5 +1,4 @@
 import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
-import {PropTypes} from 'prop-types';
 import {Image} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
@@ -8,7 +7,7 @@ import {useTag} from '../hooks/ApiHooks';
 import {mediaUrl} from '../utils/app-config';
 import ModifyForm from '../components/ModifyForm';
 
-const Profile = ({navigation}) => {
+const Profile = () => {
   const [isModifyVisible, setIsModifyVisible] = useState(false);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getFilesByTag} = useTag();
@@ -21,7 +20,6 @@ const Profile = ({navigation}) => {
 
   // logout functionality for button
   const logOut = async () => {
-    console.log('profile, logout');
     try {
       await AsyncStorage.clear();
       setIsLoggedIn(false);
@@ -55,6 +53,7 @@ const Profile = ({navigation}) => {
           height: '80%',
           borderRadius: 15,
           alignItems: 'center',
+          marginBottom: '15%',
         }}
       >
         {/* Render the ModifyForm as a modal */}
@@ -71,7 +70,6 @@ const Profile = ({navigation}) => {
             height: 200,
             borderRadius: 15,
             resizeMode: 'cover',
-
           }}
         ></Image>
         <Text category="h3" style={{textAlign: 'center', marginBottom: 5}}>
@@ -82,51 +80,50 @@ const Profile = ({navigation}) => {
             borderRadius: 15,
             alignItems: 'center',
             flexDirection: 'row',
-            marginBottom: 50,
+            marginBottom: '10%',
             justifyContent: 'center',
           }}
         >
           <Layout
-          style= {{
-            flexDirection:'row',
-            alignItems:'center',
-          }}>
-          <Icon
-            name="person-outline"
-            fill="#000"
-            style={{width: 20, height: 20, marginRight: 5}}
-          />
-          <Text style={{textAlign: 'center'}}>Username: {user.username}</Text>
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Icon
+              name="person-outline"
+              fill="#000"
+              style={{width: 20, height: 20, marginRight: 5}}
+            />
+            <Text style={{textAlign: 'center'}}>Username: {user.username}</Text>
           </Layout>
           <Layout
-          style= {{
-            flexDirection:'row',
-            alignItems:'center',
-          }}>
-          <Icon
-            name="email-outline"
-            fill="#000"
-            style={{width: 20, height: 20, marginRight: 5}}
-          />
-          <Text style={{textAlign: 'center'}}>{user.email}</Text>
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Icon
+              name="email-outline"
+              fill="#000"
+              style={{width: 20, height: 20, marginRight: 5}}
+            />
+            <Text style={{textAlign: 'center'}}>{user.email}</Text>
           </Layout>
         </Card>
         <Button
+          status="info"
           style={{borderRadius: 15, marginBottom: 5}}
           onPress={showModify}
         >
           Edit profile
         </Button>
-        <Button style={{borderRadius: 15}} onPress={logOut}>
+        <Button status="info" style={{borderRadius: 15}} onPress={logOut}>
           Log out
         </Button>
       </Card>
     </Layout>
   );
-};
-
-Profile.propTypes = {
-  navigation: PropTypes.object,
 };
 
 export default Profile;

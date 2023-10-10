@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {useUser} from '../hooks/ApiHooks';
 import {useForm, Controller} from 'react-hook-form';
 import {Alert} from 'react-native';
-import { Modal, Button, Card, Input } from '@ui-kitten/components';
+import {Modal, Button, Card, Input} from '@ui-kitten/components';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
@@ -46,7 +46,7 @@ const ModifyForm = ({visible, onClose, user}) => {
       visible={visible}
       backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
       onBackdropPress={onClose}
-      style={{width: '70%'}}
+      style={{width: '70%', paddingBottom: '50%'}}
     >
       <Card containerStyle={{borderRadius: 10}}>
         <Controller
@@ -74,6 +74,7 @@ const ModifyForm = ({visible, onClose, user}) => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.username?.message}
+              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
             />
           )}
           name="username"
@@ -93,6 +94,7 @@ const ModifyForm = ({visible, onClose, user}) => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.password?.message}
+              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
             />
           )}
           name="password"
@@ -118,6 +120,7 @@ const ModifyForm = ({visible, onClose, user}) => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.confirm_password?.message}
+              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
             />
           )}
           name="confirm_password"
@@ -139,6 +142,7 @@ const ModifyForm = ({visible, onClose, user}) => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.email?.message}
+              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
             />
           )}
           name="email"
@@ -158,17 +162,19 @@ const ModifyForm = ({visible, onClose, user}) => {
               onChangeText={onChange}
               value={value}
               errorMessage={errors.full_name?.message}
+              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
             />
           )}
           name="full_name"
         />
 
         <Button
-          buttonStyle={{
-            borderRadius: 10,
-          }}
-          onPress={handleSubmit(update)}>Update</Button>
-
+          status="info"
+          onPress={handleSubmit(update)}
+          style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
+        >
+          Update
+        </Button>
       </Card>
     </Modal>
   );

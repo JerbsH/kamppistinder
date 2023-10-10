@@ -63,10 +63,6 @@ const SwipeCards = () => {
     fetchFavourites();
   }, []);
 
-  console.log('favourites:', favouriteMedia);
-  console.log('favourite length', favouriteMedia.length);
-
-  // const notMyMedia = mediaArray.filter((item) => item.user_id !== user.user_id);
   let notMyMedia = mediaArray.filter((item) => {
     // Check if the item is not in the favoriteMedia list
     return (
@@ -74,8 +70,6 @@ const SwipeCards = () => {
       item.user_id !== user.user_id
     );
   });
-
-  console.log('notMyMedia length', notMyMedia.length);
 
   const [index, setIndex] = useState(0);
   const translateX = useMemo(() => new Animated.Value(0), []);
@@ -118,12 +112,9 @@ const SwipeCards = () => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          const favouriteId = currentMedia.file_id;
-          console.log('swipe right, fileId:', favouriteId);
           setIndex((prevIndex) => (prevIndex + 1) % notMyMedia.length);
           translateX.setValue(0);
           swipesRef.current += 1;
-          console.log('swipe right', swipesRef);
         });
       } else if (translationX < -width / 2 || velocityX < -800) {
         // Swipe left
@@ -153,12 +144,10 @@ const SwipeCards = () => {
       fetchFavourites();
     }
   };
-
   const currentMedia = useMemo(
     () => notMyMedia[index] || {},
     [notMyMedia, index],
   );
-
   return (
     <GestureHandlerRootView style={styles.container}>
       <Toast />
@@ -202,9 +191,7 @@ const SwipeCards = () => {
         </PanGestureHandler>
       ) : (
         <View style={styles.noMediaContainer}>
-          <Text style={styles.noMediaText}>
-            No more media to display
-          </Text>
+          <Text style={styles.noMediaText}>No more media to display</Text>
         </View>
       )}
     </GestureHandlerRootView>
@@ -250,16 +237,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   refreshButton: {
-    backgroundColor: '#ffa575', // Example background color
-    paddingVertical: 10, // Adjust the height of the button
-    paddingHorizontal: 20, // Adjust the width of the button
+    backgroundColor: '#ffa575',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10, // Add some margin to create spacing
+    marginBottom: 10,
   },
   refreshButtonText: {
-    color: 'black', // Text color
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -274,6 +261,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 export default SwipeCards;

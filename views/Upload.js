@@ -55,7 +55,6 @@ const Upload = ({visible, onClose, navigation}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
-      console.log('lataus', response);
       const tagResponse = await postTag(
         {
           file_id: response.file_id,
@@ -63,7 +62,6 @@ const Upload = ({visible, onClose, navigation}) => {
         },
         token,
       );
-      console.log('postTag', tagResponse);
       setUpdate(!update);
       setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
@@ -142,7 +140,7 @@ const Upload = ({visible, onClose, navigation}) => {
                     style={{
                       width: '90%',
                       alignSelf: 'center',
-                      marginVertical: 8,
+                      marginVertical: 4,
                     }}
                   />
                 )}
@@ -159,7 +157,7 @@ const Upload = ({visible, onClose, navigation}) => {
                     style={{
                       width: '90%',
                       alignSelf: 'center',
-                      marginVertical: 8,
+                      marginVertical: 4,
                     }}
                   >
                     <Input
@@ -172,8 +170,7 @@ const Upload = ({visible, onClose, navigation}) => {
                       style={{
                         width: '100%',
                         alignSelf: 'center',
-                        marginVertical: 8,
-                        maxHeight: 170,
+                        maxHeight: 100,
                       }}
                     />
                   </ScrollView>
@@ -181,20 +178,23 @@ const Upload = ({visible, onClose, navigation}) => {
                 name="description"
               />
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 onPress={pickImage}
               >
                 Choose picture
               </Button>
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-                color={'error'}
+                appearance="outline"
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 onPress={resetForm}
               >
                 Reset
               </Button>
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 loading={loading}
                 disabled={errors.description || errors.title}
                 onPress={handleSubmit(upload)}

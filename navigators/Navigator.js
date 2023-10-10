@@ -6,7 +6,6 @@ import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import Upload from '../views/Upload';
 import PropTypes from 'prop-types';
 import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';

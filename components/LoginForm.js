@@ -39,7 +39,7 @@ const LoginForm = ({visible, onClose}) => {
       visible={visible}
       backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
       onBackdropPress={onClose}
-      style={{width: "70%"}}
+      style={{width: "70%", paddingBottom: '75%'}}
     >
       <Card
         style={{
@@ -63,7 +63,7 @@ const LoginForm = ({visible, onClose}) => {
                 onChangeText={onChange}
                 value={value}
                 autoCapitalize="none"
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
               />
             )}
             name="username"
@@ -92,7 +92,8 @@ const LoginForm = ({visible, onClose}) => {
             name="password"
           />
           <Button onPress={handleSubmit(logIn)}
-          style={{width: "90%", alignSelf: "center", marginVertical: 8,}}>Login</Button>
+          status="info"
+          style={{width: "90%", alignSelf: "center", marginVertical: 4,}}>Login</Button>
         </Layout>
       </Card>
     </Modal>

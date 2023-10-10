@@ -60,7 +60,9 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
         />
       )}
     />
+
   );
+
 });
 
 List.propTypes = {

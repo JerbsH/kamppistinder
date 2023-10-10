@@ -7,7 +7,6 @@ import {MainContext} from '../contexts/MainContext';
 import {Button, Card, Text} from '@ui-kitten/components';
 import {Divider, Image} from 'react-native-elements';
 import Toast from 'react-native-toast-message';
-import Comments from './Comments';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -25,8 +24,6 @@ const Single = ({route, navigation}) => {
     filename,
     time_added: timeAdded,
     user_id: userId,
-    filesize,
-    media_type: mediaType,
     file_id: fileId,
   } = route.params;
 
@@ -51,9 +48,12 @@ const Single = ({route, navigation}) => {
         const response = await deleteFavourite(fileId, token);
         response && setUserLike(false);
         Toast.show({
-          text1: 'Like removed!',
+          text1: 'Like removed! Returning to My Likes...',
         });
         setUpdate(!update);
+        setTimeout(() => {
+          navigation.goBack();
+        }, 2500);
         setButtonDisabled(true);
       } catch (error) {
         console.error(error.message);
@@ -94,8 +94,10 @@ const Single = ({route, navigation}) => {
         resizeMode="cover"
         style={{height: 300, marginBottom: 10}}
       />
-      <Text category="h2"style={{ marginVertical: 10 }}>{title}</Text>
-      <Text style={{ marginBottom: 10 }}>{description}</Text>
+      <Text category="h2" style={{marginVertical: 10}}>
+        {title}
+      </Text>
+      <Text style={{marginBottom: 10}}>{description}</Text>
       <Divider />
       <Text>Time added: {date.toDateString()}</Text>
       <Text>Added by: {owner.full_name}</Text>
@@ -104,7 +106,7 @@ const Single = ({route, navigation}) => {
         onPress={() => {
           navigation.navigate('Comments', route.params);
         }}
-        style={{ marginVertical: 10 }}
+        style={{marginVertical: 10}}
       >
         Start Chatting
       </Button>
@@ -114,8 +116,7 @@ const Single = ({route, navigation}) => {
         status="danger"
         onPress={removeFavourite}
         disabled={buttonDisabled}
-        style={{ marginVertical: 10 }}
-
+        style={{marginVertical: 10}}
       >
         Remove like
       </Button>

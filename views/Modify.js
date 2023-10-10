@@ -9,12 +9,7 @@ import {Button, Card, Input, Text} from '@ui-kitten/components';
 import {mediaUrl} from '../utils/app-config';
 
 const Modify = ({navigation, route}) => {
-  const {
-    title,
-    description,
-    filename,
-    file_id: fileId,
-  } = route.params;
+  const {title, description, filename, file_id: fileId} = route.params;
   const {update, setUpdate} = useContext(MainContext);
   const {putMedia, deleteMedia} = useMedia();
 
@@ -36,20 +31,15 @@ const Modify = ({navigation, route}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const result = await putMedia(fileId, token, data);
-      console.log('updateMedia()', result.message);
       setUpdate(!update);
-      Alert.alert(
-        'Update Successful',
-        result.message,
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              navigation.navigate('My Likes');
-            },
+      Alert.alert('Update Successful', result.message, [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('My Likes');
           },
-        ]
-      );
+        },
+      ]);
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +60,6 @@ const Modify = ({navigation, route}) => {
             const result = await deleteMedia(fileId, token);
             console.log('deleteFile()', result.message);
             setUpdate(!update);
-            // navigate back after deleting a file
             navigation.goBack();
           } catch (error) {
             console.error(error);
@@ -79,7 +68,6 @@ const Modify = ({navigation, route}) => {
       },
     ]);
   };
-
 
   return (
     <Card>
