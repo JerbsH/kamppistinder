@@ -14,11 +14,22 @@ const SwipeCards = () => {
   const { mediaArray, loadMedia} = useMedia();
   const { user } = useContext(MainContext);
 
+
+
   const [myFilesOnly, setMyFilesOnly] = useState(false);
+  const [filteredMediaArray, setFilteredMediaArray] = useState([]);
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
-      await loadMedia(myFilesOnly ? user.user_id : 0);
+      const mediaData = await loadMedia(myFilesOnly ? user.user_id : 0);
+
+      // Filter out the user's favorite media items
+      const filteredMediaData = mediaData.filter((item) => {
+        const isFavorite = item.favorites.some((favorite) => favorite.user_id === user.user_id);
+        return !isFavorite;
+      });
+
+      setMediaArray(myFilesOnly ? filteredMediaData : mediaData);
 
       setIndex(0);
       translateX.setValue(0);
@@ -27,6 +38,8 @@ const SwipeCards = () => {
       console.error('Refresh failed', error);
     }
   };
+
+
 
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
@@ -104,16 +117,20 @@ const SwipeCards = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (notMyMedia.length === 0) {
-      setIndex(0);
-    }
-  }, [notMyMedia]);
-
   const notMyMedia = mediaArray.filter(item => item.user_id !== user.user_id);
+  console.log('mediaarray: ', mediaArray.length);
+  console.log('notmymedia: ', notMyMedia);
 
   const currentMedia = useMemo(() => notMyMedia[index] || {}, [notMyMedia, index]);
+  console.log(currentMedia);
+
+  // useEffect(() => {
+  //   if (notMyMedia.length === 0) {
+  //     setIndex(0);
+  //   }
+  // }, [notMyMedia]);
+
+
 
   return (
     <GestureHandlerRootView style={styles.container}>
