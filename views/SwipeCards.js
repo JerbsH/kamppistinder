@@ -1,21 +1,77 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, Dimensions, Text, View, Image } from 'react-native';
-import { PanGestureHandler, GestureHandlerRootView, State } from 'react-native-gesture-handler';
-import { useFavourite, useMedia } from '../hooks/ApiHooks';
-import { mediaUrl } from '../utils/app-config';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {
+  Animated,
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+  State,
+} from 'react-native-gesture-handler';
+import {useFavourite, useMedia} from '../hooks/ApiHooks';
+import {mediaUrl} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { useContext } from 'react';
-import { MainContext } from '../contexts/MainContext';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const SwipeCards = () => {
-  const { mediaArray } = useMedia();
-  const { user } = useContext(MainContext);
+  const {mediaArray, loadMedia} = useMedia();
+  const {user} = useContext(MainContext);
+
+  // Reset notMyMedia when refreshing
+  const resetNotMyMedia = () => {
+    notMyMedia = mediaArray.filter((item) => {
+      return (
+        !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
+        item.user_id !== user.user_id
+      );
+    });
+  };
+
+  const handleRefresh = async () => {
+    console.log('Refreshing...');
+    try {
+      fetchFavourites();
+      setIndex(0);
+      translateX.setValue(0);
+      swipesRef.current = 0;
+      resetNotMyMedia();
+    } catch (error) {
+      console.error('Refresh failed', error);
+    }
+  };
+
+  const [favouriteMedia, setFavouriteMedia] = useState([]);
+  const fetchFavourites = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const listOfFavourites = await getFavouritesByToken(token);
+      setFavouriteMedia(listOfFavourites);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchFavourites();
+  }, []);
+
+  let notMyMedia = mediaArray.filter((item) => {
+    // Check if the item is not in the favoriteMedia list
+    return (
+      !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
+      item.user_id !== user.user_id
+    );
+  });
 
   const [index, setIndex] = useState(0);
-  const numMedia = mediaArray.length;
   const translateX = useMemo(() => new Animated.Value(0), []);
 
   const swipesRef = useRef(0);
@@ -26,21 +82,21 @@ const SwipeCards = () => {
   });
 
   const [userLike, setUserLike] = useState(false);
-  const { postFavourite } = useFavourite();
+  const {getFavouritesByToken, postFavourite} = useFavourite();
 
   const handleGestureEvent = Animated.event(
-    [{ nativeEvent: { translationX: translateX } }],
-    { useNativeDriver: false }
+    [{nativeEvent: {translationX: translateX}}],
+    {useNativeDriver: false},
   );
 
-  const handleSwipe = async ({ nativeEvent }) => {
-    const { state, translationX, velocityX } = nativeEvent;
+  const handleSwipe = async ({nativeEvent}) => {
+    const {state, translationX, velocityX} = nativeEvent;
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
         const token = await AsyncStorage.getItem('userToken');
         try {
-          await postFavourite({ file_id: currentMedia.file_id }, token);
+          await postFavourite({file_id: currentMedia.file_id}, token);
           Toast.show({
             text1: 'Post Liked',
             topOffset: 10,
@@ -56,12 +112,9 @@ const SwipeCards = () => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          const favouriteId = currentMedia.file_id;
-          console.log('swipe right, fileId:', favouriteId);
-          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
+          setIndex((prevIndex) => (prevIndex + 1) % notMyMedia.length);
           translateX.setValue(0);
           swipesRef.current += 1;
-          console.log('swipe right', swipesRef);
         });
       } else if (translationX < -width / 2 || velocityX < -800) {
         // Swipe left
@@ -76,7 +129,7 @@ const SwipeCards = () => {
           duration: 400,
           useNativeDriver: true,
         }).start(() => {
-          setIndex((prevIndex) => (prevIndex + 1) % numMedia);
+          setIndex((prevIndex) => (prevIndex + 1) % notMyMedia.length);
           translateX.setValue(0);
         });
       } else {
@@ -88,53 +141,59 @@ const SwipeCards = () => {
           useNativeDriver: true,
         }).start();
       }
+      fetchFavourites();
     }
   };
-
-  useEffect(() => {
-    if (notMyMedia.length === 0) {
-      setIndex(0);
-    }
-  }, [notMyMedia]);
-
-  const notMyMedia = mediaArray.filter(item => item.user_id !== user.user_id);
-
-  const currentMedia = useMemo(() => notMyMedia[index] || {}, [notMyMedia, index]);
-
+  const currentMedia = useMemo(
+    () => notMyMedia[index] || {},
+    [notMyMedia, index],
+  );
   return (
     <GestureHandlerRootView style={styles.container}>
       <Toast />
-      <PanGestureHandler
-        onGestureEvent={handleGestureEvent}
-        onHandlerStateChange={handleSwipe}
-      >
-        <Animated.View
-          style={[
-            styles.card,
-            {
-              transform: [{ translateX }, { rotate }],
-            },
-          ]}
+
+      <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
+        <Text style={styles.refreshButtonText}>Refresh</Text>
+      </TouchableOpacity>
+
+      {notMyMedia.length > 0 ? (
+        <PanGestureHandler
+          onGestureEvent={handleGestureEvent}
+          onHandlerStateChange={handleSwipe}
         >
-          <Image
-            source={{ uri: mediaUrl + currentMedia.filename }}
-            style={styles.image}
-            resizeMode="cover"
-          />
-          <View style={styles.cardContent}>
-            <Text style={styles.title}>
-              {currentMedia.title && currentMedia.title.length > 20
-                ? currentMedia.title.slice(0, 20) + '...'
-                : currentMedia.title}
-            </Text>
-            <Text style={styles.description}>
-              {currentMedia.description && currentMedia.description.length > 100
-                ? currentMedia.description.slice(0, 100) + '...'
-                : currentMedia.description}
-            </Text>
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
+          <Animated.View
+            style={[
+              styles.card,
+              {
+                transform: [{translateX}, {rotate}],
+              },
+            ]}
+          >
+            <Image
+              source={{uri: mediaUrl + currentMedia.filename}}
+              style={styles.image}
+              resizeMode="cover"
+            />
+            <View style={styles.cardContent}>
+              <Text style={styles.title}>
+                {currentMedia.title && currentMedia.title.length > 20
+                  ? currentMedia.title.slice(0, 20) + '...'
+                  : currentMedia.title}
+              </Text>
+              <Text style={styles.description}>
+                {currentMedia.description &&
+                currentMedia.description.length > 100
+                  ? currentMedia.description.slice(0, 100) + '...'
+                  : currentMedia.description}
+              </Text>
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
+      ) : (
+        <View style={styles.noMediaContainer}>
+          <Text style={styles.noMediaText}>No more media to display</Text>
+        </View>
+      )}
     </GestureHandlerRootView>
   );
 };
@@ -176,6 +235,30 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginTop: 10,
+  },
+  refreshButton: {
+    backgroundColor: '#ffa575',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  refreshButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noMediaContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noMediaText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

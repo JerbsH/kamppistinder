@@ -18,6 +18,7 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const listOfFavourites = await getFavouritesByToken(token);
+
       setFavouriteMedia(listOfFavourites);
     } catch (error) {
       console.error(error.message);
@@ -29,19 +30,24 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
   }, []);
 
   useEffect(() => {
-    fetchFavourites();
+    // Update favourites every 2 seconds
+    const intervalId = setInterval(fetchFavourites, 2000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
     if (filterMyFiles) {
       setUsableData(mediaArray);
     } else {
+      const filteredMediaArray = mediaArray.filter((item) => {
+        return favouriteMedia
+          .map((favorite) => favorite.file_id)
+          .includes(item.file_id);
+      });
       setUsableData(filteredMediaArray);
     }
-  }, [update, favouriteMedia]);
-
-  const filteredMediaArray = mediaArray.filter((item) => {
-    return favouriteMedia
-      .map((favorite) => favorite.file_id)
-      .includes(item.file_id);
-  });
+  }, [filterMyFiles, mediaArray, favouriteMedia]);
 
   return (
     <KittenList
@@ -54,7 +60,9 @@ const List = React.memo(({ navigation, myFilesOnly, filterMyFiles }) => {
         />
       )}
     />
+
   );
+
 });
 
 List.propTypes = {

@@ -27,7 +27,6 @@ const Home = ({navigation}) => {
     if (shouldCloseUpload) {
       setUploadModalVisible(false);
       setShouldCloseUpload(false);
-      // setUploadSuccess(true);
     }
   }, [shouldCloseUpload]);
 
@@ -39,12 +38,11 @@ const Home = ({navigation}) => {
           media.description.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setSearchResults(results);
-      setShowList(false); // Hide the list when search is active
+      setShowList(false);
     } else {
-      setShowList(true); // Show the list when no search is performed
+      setShowList(true);
     }
   }, [searchQuery, mediaArray]);
-
 
   return (
     <Layout style={{flex: 1}}>
@@ -59,7 +57,7 @@ const Home = ({navigation}) => {
       >
         <Button
           appearance={'outline'}
-          status='success'
+          status="success"
           onPress={toggleUploadModal}
           style={{flex: 1, marginHorizontal: 5}}
         >
@@ -67,7 +65,7 @@ const Home = ({navigation}) => {
         </Button>
         <Button
           appearance={'outline'}
-          status='info'
+          status="info"
           style={{flex: 1, marginHorizontal: 5}}
           onPress={() => {
             navigation.navigate('My files');

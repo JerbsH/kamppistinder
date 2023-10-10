@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Modal, Text, Button, Card, Input, Layout} from '@ui-kitten/components';
 import {Alert, KeyboardAvoidingView, ScrollView} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
@@ -35,7 +35,10 @@ const Upload = ({visible, onClose, navigation}) => {
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
     const formData = new FormData();
-    formData.append('title', `${uploadData.title}, ${selectedCity.split(',')[0].trim()}`);
+    formData.append(
+      'title',
+      `${uploadData.title}, ${selectedCity.split(',')[0].trim()}`,
+    );
     formData.append('description', uploadData.description);
     console.log(formData);
     const filename = image.split('/').pop();
@@ -52,7 +55,6 @@ const Upload = ({visible, onClose, navigation}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postMedia(formData, token);
-      console.log('lataus', response);
       const tagResponse = await postTag(
         {
           file_id: response.file_id,
@@ -60,7 +62,6 @@ const Upload = ({visible, onClose, navigation}) => {
         },
         token,
       );
-      console.log('postTag', tagResponse);
       setUpdate(!update);
       setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
@@ -96,7 +97,7 @@ const Upload = ({visible, onClose, navigation}) => {
       aspect: [4, 3],
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
       setType(result.assets[0].type);
     }
@@ -113,7 +114,7 @@ const Upload = ({visible, onClose, navigation}) => {
         onBackdropPress={onClose}
         style={{width: '70%'}}
       >
-        <MapPicker/>
+        <MapPicker />
         <ScrollView>
           <Card>
             <Layout
@@ -139,7 +140,7 @@ const Upload = ({visible, onClose, navigation}) => {
                     style={{
                       width: '90%',
                       alignSelf: 'center',
-                      marginVertical: 8,
+                      marginVertical: 4,
                     }}
                   />
                 )}
@@ -156,7 +157,7 @@ const Upload = ({visible, onClose, navigation}) => {
                     style={{
                       width: '90%',
                       alignSelf: 'center',
-                      marginVertical: 8,
+                      marginVertical: 4,
                     }}
                   >
                     <Input
@@ -169,8 +170,7 @@ const Upload = ({visible, onClose, navigation}) => {
                       style={{
                         width: '100%',
                         alignSelf: 'center',
-                        marginVertical: 8,
-                        maxHeight: 170,
+                        maxHeight: 100,
                       }}
                     />
                   </ScrollView>
@@ -178,20 +178,23 @@ const Upload = ({visible, onClose, navigation}) => {
                 name="description"
               />
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 onPress={pickImage}
               >
                 Choose picture
               </Button>
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
-                color={'error'}
+                appearance="outline"
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 onPress={resetForm}
               >
                 Reset
               </Button>
               <Button
-                style={{width: '90%', alignSelf: 'center', marginVertical: 8}}
+                status="success"
+                style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 loading={loading}
                 disabled={errors.description || errors.title}
                 onPress={handleSubmit(upload)}

@@ -91,7 +91,7 @@ const useMedia = (update, myFilesOnly) => {
     }
   };
 
-  return {mediaArray, postMedia, loading, deleteMedia, putMedia};
+  return {mediaArray, postMedia, loading, deleteMedia, putMedia, loadMedia};
 };
 
 const useAuthentication = () => {

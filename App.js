@@ -6,7 +6,6 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 export default () => (
   <>
-
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
       <MainProvider>
