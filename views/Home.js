@@ -53,7 +53,6 @@ const Home = ({navigation}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingVertical: 10,
           marginHorizontal: 16,
         }}
       >

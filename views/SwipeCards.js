@@ -1,36 +1,37 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet, Dimensions, Text, View, Image, TouchableOpacity } from 'react-native';
-import { PanGestureHandler, GestureHandlerRootView, State } from 'react-native-gesture-handler';
-import { useFavourite, useMedia} from '../hooks/ApiHooks';
-import { mediaUrl } from '../utils/app-config';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
+import {
+  Animated,
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+  State,
+} from 'react-native-gesture-handler';
+import {useFavourite, useMedia} from '../hooks/ApiHooks';
+import {mediaUrl} from '../utils/app-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { useContext } from 'react';
-import { MainContext } from '../contexts/MainContext';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const SwipeCards = () => {
-  const { mediaArray, loadMedia} = useMedia();
-  const { user } = useContext(MainContext);
-
-
-
+  const {mediaArray, loadMedia} = useMedia();
+  const {user} = useContext(MainContext);
   const [myFilesOnly, setMyFilesOnly] = useState(false);
-  const [filteredMediaArray, setFilteredMediaArray] = useState([]);
+
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
       const mediaData = await loadMedia(myFilesOnly ? user.user_id : 0);
-
-      // Filter out the user's favorite media items
-      const filteredMediaData = mediaData.filter((item) => {
-        const isFavorite = item.favorites.some((favorite) => favorite.user_id === user.user_id);
-        return !isFavorite;
-      });
-
-      setMediaArray(myFilesOnly ? filteredMediaData : mediaData);
-
+      fetchFavourites();
       setIndex(0);
       translateX.setValue(0);
       swipesRef.current = 0;
@@ -38,8 +39,6 @@ const SwipeCards = () => {
       console.error('Refresh failed', error);
     }
   };
-
-
 
   const [index, setIndex] = useState(0);
   const numMedia = mediaArray.length;
@@ -53,21 +52,21 @@ const SwipeCards = () => {
   });
 
   const [userLike, setUserLike] = useState(false);
-  const { postFavourite } = useFavourite();
+  const {getFavouritesByToken, postFavourite} = useFavourite();
 
   const handleGestureEvent = Animated.event(
-    [{ nativeEvent: { translationX: translateX } }],
-    { useNativeDriver: false }
+    [{nativeEvent: {translationX: translateX}}],
+    {useNativeDriver: false},
   );
 
-  const handleSwipe = async ({ nativeEvent }) => {
-    const { state, translationX, velocityX } = nativeEvent;
+  const handleSwipe = async ({nativeEvent}) => {
+    const {state, translationX, velocityX} = nativeEvent;
     if (state === State.END) {
       if (translationX > width / 2 || velocityX > 800) {
         // Swipe right
         const token = await AsyncStorage.getItem('userToken');
         try {
-          await postFavourite({ file_id: currentMedia.file_id }, token);
+          await postFavourite({file_id: currentMedia.file_id}, token);
           Toast.show({
             text1: 'Post Liked',
             topOffset: 10,
@@ -117,20 +116,31 @@ const SwipeCards = () => {
       }
     }
   };
-  const notMyMedia = mediaArray.filter(item => item.user_id !== user.user_id);
-  console.log('mediaarray: ', mediaArray.length);
-  console.log('notmymedia: ', notMyMedia);
 
-  const currentMedia = useMemo(() => notMyMedia[index] || {}, [notMyMedia, index]);
-  console.log(currentMedia);
+  const [favouriteMedia, setFavouriteMedia] = useState([]);
+  const fetchFavourites = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const listOfFavourites = await getFavouritesByToken(token);
+      setFavouriteMedia(listOfFavourites);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchFavourites();
+  }, []);
 
-  // useEffect(() => {
-  //   if (notMyMedia.length === 0) {
-  //     setIndex(0);
-  //   }
-  // }, [notMyMedia]);
+  console.log('favourites:', favouriteMedia);
+  console.log('favourite length', favouriteMedia.length);
 
+  const notMyMedia = mediaArray.filter((item) => item.user_id !== user.user_id);
+  console.log('notMyMedia length', notMyMedia.length);
 
+  const currentMedia = useMemo(
+    () => notMyMedia[index] || {},
+    [notMyMedia, index],
+  );
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -148,12 +158,12 @@ const SwipeCards = () => {
           style={[
             styles.card,
             {
-              transform: [{ translateX }, { rotate }],
+              transform: [{translateX}, {rotate}],
             },
           ]}
         >
           <Image
-            source={{ uri: mediaUrl + currentMedia.filename }}
+            source={{uri: mediaUrl + currentMedia.filename}}
             style={styles.image}
             resizeMode="cover"
           />
@@ -227,7 +237,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
 });
 
 export default SwipeCards;
