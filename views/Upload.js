@@ -7,12 +7,12 @@ import {useMedia, useTag} from '../hooks/ApiHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
-import {appId, placeholderImage} from '../utils/app-config';
+import {appId} from '../utils/app-config';
 import MapPicker from '../components/MapPicker';
 
 const Upload = ({visible, onClose, navigation}) => {
   const {update, setUpdate} = useContext(MainContext);
-  const [image, setImage] = useState(placeholderImage);
+  const [image, setImage] = useState(null);
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
   const [type, setType] = useState('image');
@@ -62,6 +62,7 @@ const Upload = ({visible, onClose, navigation}) => {
         },
         token,
       );
+      console.log('postTag', tagResponse);
       setUpdate(!update);
       setUploadSuccess(true);
       Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
@@ -79,7 +80,7 @@ const Upload = ({visible, onClose, navigation}) => {
   };
 
   const resetForm = () => {
-    setImage(placeholderImage);
+    setImage(null);
     setType('image');
     reset();
   };
@@ -123,8 +124,6 @@ const Upload = ({visible, onClose, navigation}) => {
               <Text category="h1" style={{marginBottom: 16}}>
                 Upload
               </Text>
-
-              {/* Rest of the code remains unchanged */}
               <Controller
                 control={control}
                 rules={{
@@ -178,11 +177,11 @@ const Upload = ({visible, onClose, navigation}) => {
                 name="description"
               />
               <Button
-                status="success"
+                status={image ? 'success' : 'warning'}
                 style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
                 onPress={pickImage}
               >
-                Choose picture
+                {image ? 'Picture added' : 'Choose picture'}
               </Button>
               <Button
                 appearance="outline"

@@ -6,7 +6,6 @@ import Profile from '../views/Profile';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
-import PropTypes from 'prop-types';
 import {Icon} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import MyFiles from '../views/MyFiles';
@@ -23,9 +22,6 @@ const heartIcon = () => (
 );
 const personIcon = () => (
   <Icon name="person-outline" style={styles.icon} fill="#000" />
-);
-const messageIcon = () => (
-  <Icon name="message-circle-outline" style={styles.icon} fill="#000" />
 );
 const swipeIcon = () => (
   <Icon name="search-outline" style={styles.icon} fill="#000" />
@@ -108,10 +104,6 @@ const Navigator = () => {
       <Stackscreen />
     </NavigationContainer>
   );
-};
-
-Login.propTypes = {
-  navigation: PropTypes.object,
 };
 
 export default Navigator;
