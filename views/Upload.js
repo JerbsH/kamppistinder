@@ -66,7 +66,7 @@ const Upload = ({visible, onClose, navigation}) => {
       console.log('postTag', tagResponse);
       setUpdate(!update);
       setUploadSuccess(true);
-      Alert.alert('Upload', `${response.message} (id: ${response.file_id})`, [
+      Alert.alert('Upload', 'upload succesful', [
         {
           text: 'Ok',
           onPress: () => {
@@ -138,7 +138,6 @@ const Upload = ({visible, onClose, navigation}) => {
                     value={value}
                     errorMessage={errors.title?.message}
                     style={{
-                      width: '90%',
                       alignSelf: 'center',
                       marginVertical: 4,
                     }}
@@ -155,7 +154,6 @@ const Upload = ({visible, onClose, navigation}) => {
                 render={({field: {onChange, onBlur, value}}) => (
                   <ScrollView
                     style={{
-                      width: '90%',
                       alignSelf: 'center',
                       marginVertical: 4,
                     }}
@@ -168,7 +166,6 @@ const Upload = ({visible, onClose, navigation}) => {
                       value={value}
                       errorMessage={errors.description?.message}
                       style={{
-                        width: '100%',
                         alignSelf: 'center',
                         maxHeight: 100,
                       }}

@@ -36,8 +36,8 @@ const SwipeCards = () => {
       setIndex(0);
       translateX.setValue(0);
       swipesRef.current = 0;
-      //resetNotMyMedia();
       fetchNotMyMedia();
+      //resetNotMyMedia();
     } catch (error) {
       console.error('Refresh failed', error);
     }
@@ -93,13 +93,13 @@ const SwipeCards = () => {
           });
           setUserLike(true);
         } catch (error) {
-          console.error(error.message);
+          console.log(error.message);
         }
 
         // Remove the liked post from the notMyMedia array
-      const updatedNotMyMedia = [...notMyMedia];
-      updatedNotMyMedia.splice(index, 1);
-      setNotMyMedia(updatedNotMyMedia);
+        const updatedNotMyMedia = [...notMyMedia];
+        updatedNotMyMedia.splice(index, 1);
+        setNotMyMedia(updatedNotMyMedia);
 
         Animated.timing(translateX, {
           toValue: width,
@@ -120,18 +120,18 @@ const SwipeCards = () => {
         });
 
         // Remove the disliked post from the notMyMedia array
-      const updatedNotMyMedia = [...notMyMedia];
-      updatedNotMyMedia.splice(index, 1);
-      setIndex((prevIndex) => (prevIndex + 1) % updatedNotMyMedia.length);
+        const updatedNotMyMedia = [...notMyMedia];
+        updatedNotMyMedia.splice(index, 1);
+        setIndex((prevIndex) => (prevIndex + 1) % updatedNotMyMedia.length);
 
-      // Check if there are still cards to display
-      if (updatedNotMyMedia.length > 0) {
-        // Make sure the index does not exceed the array length
-        setIndex((prevIndex) => prevIndex % updatedNotMyMedia.length);
-      }
+        // Check if there are still cards to display
+        if (updatedNotMyMedia.length > 0) {
+          // Make sure the index does not exceed the array length
+          setIndex((prevIndex) => prevIndex % updatedNotMyMedia.length);
+        }
 
-      // Update the notMyMedia array
-      setNotMyMedia(updatedNotMyMedia);
+        // Update the notMyMedia array
+        setNotMyMedia(updatedNotMyMedia);
 
         Animated.timing(translateX, {
           toValue: -width,

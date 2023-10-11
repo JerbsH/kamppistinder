@@ -2,9 +2,11 @@ import React, {useContext} from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import googleMapsApiKey from '../utils/apiKey';
 import { MainContext } from '../contexts/MainContext';
+import { Text } from '@ui-kitten/components';
 
 const MapPicker = () => {
   const {selectedCity, setSelectedCity} = useContext(MainContext);
+
   return (
     <GooglePlacesAutocomplete
       query={{
@@ -20,7 +22,6 @@ const MapPicker = () => {
       }}
       textInputProps={{
         placeholder: 'Type your city',
-
       }}
     />
   );
