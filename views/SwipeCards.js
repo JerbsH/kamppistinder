@@ -26,19 +26,9 @@ const SwipeCards = () => {
   const {mediaArray, loadMedia} = useMedia();
   const {user} = useContext(MainContext);
 
-/*   // Reset notMyMedia when refreshing
-  const resetNotMyMedia = () => {
-    notMyMedia = mediaArray.filter((item) => {
-      return (
-        !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
-        item.user_id !== user.user_id
-      );
-    });
-  };
-  const [notMyMedia, setNotMyMedia] = useState([]); */
-
   const [notMyMedia, setNotMyMedia] = useState([]); // Initialize notMyMedia as an empty array
 
+  // refresh button functionality
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
@@ -53,6 +43,7 @@ const SwipeCards = () => {
     }
   };
 
+  // getting favourites from API
   const [favouriteMedia, setFavouriteMedia] = useState([]);
   const fetchFavourites = async () => {
     try {
@@ -67,14 +58,6 @@ const SwipeCards = () => {
     fetchNotMyMedia();
     fetchFavourites();
   }, []);
-
-  /* let notMyMedia = mediaArray.filter((item) => {
-    // Check if the item is not in the favoriteMedia list
-    return (
-      !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
-      item.user_id !== user.user_id
-    );
-  }); */
 
   const [index, setIndex] = useState(0);
   const translateX = useMemo(() => new Animated.Value(0), []);
@@ -94,6 +77,7 @@ const SwipeCards = () => {
     {useNativeDriver: false},
   );
 
+  // swiping functionality
   const handleSwipe = async ({nativeEvent}) => {
     const {state, translationX, velocityX} = nativeEvent;
     if (state === State.END) {
@@ -116,7 +100,6 @@ const SwipeCards = () => {
       const updatedNotMyMedia = [...notMyMedia];
       updatedNotMyMedia.splice(index, 1);
       setNotMyMedia(updatedNotMyMedia);
-
 
         Animated.timing(translateX, {
           toValue: width,

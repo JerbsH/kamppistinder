@@ -30,6 +30,7 @@ const Home = ({navigation}) => {
     }
   }, [shouldCloseUpload]);
 
+  // handle searching for files
   useEffect(() => {
     if (searchQuery !== '') {
       const results = mediaArray.filter(
