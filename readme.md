@@ -15,11 +15,10 @@ In utils folder create a file named apiKey.js. In the file add this:
 - Sending messages to post creator
 - Uploading a picture
 ## Screenshots
-
-![Login Screen](./assets/screenshots/login-screen.jpg )
-![Swipe Cards](./assets/screenshots/swipecards.jpg )
-![User Likes](./assets/screenshots/mylikes.jpg )
-![Comments](./assets/screenshots/comments.jpg )
+<img src="./assets/screenshots/login-screen.jpg" width="100">
+<img src="./assets/screenshots/swipecards.jpg" width="100">
+<img src="./assets/screenshots/mylikes.jpg" width="100">
+<img src="./assets/screenshots/comments.jpg" width="100">
 
 
 ## Authors
