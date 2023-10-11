@@ -6,6 +6,8 @@ App for students to search for appartments and roommates. Swipe through posts an
 ## Installation
 
 Clone the project to a folder ```git clone https://github.com/JerbsH/kamppistinder``` and run ```npm install```
+In utils folder create a file named apiKey.js. In the file add this:
+```const googleMapsApiKey = 'YOUR_API_KEY_HERE'; export default googleMapsApiKey;```
 
 ## Features
 
