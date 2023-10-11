@@ -16,10 +16,10 @@ In utils folder create a file named apiKey.js. In the file add this:
 - Uploading a picture
 ## Screenshots
 
-![Login Screen](./assets/screenshots/login-screen.jpg)
-![Swipe Cards](./assets/screenshots/swipecards.jpg)
-![User Likes](./assets/screenshots/mylikes.jpg)
-![Comments](./assets/screenshots/comments.jpg)
+![Login Screen](./assets/screenshots/login-screen.jpg | width=100)
+![Swipe Cards](./assets/screenshots/swipecards.jpg | width=100)
+![User Likes](./assets/screenshots/mylikes.jpg | width=100)
+![Comments](./assets/screenshots/comments.jpg | width=100)
 
 
 ## Authors
