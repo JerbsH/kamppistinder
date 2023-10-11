@@ -43,98 +43,113 @@ const RegisterForm = ({visible, onClose, onSuccess}) => {
       backdropStyle={{backgroundColor: 'rgba(0, 0, 0, 0.5)'}}
       onBackdropPress={onClose}
       style={{width: '70%', paddingBottom: '75%'}}
-
     >
-        <Card
-          style={{
-            width: '100%',
-            alignSelf: 'center',
-          }}
-        >
-          <Layout>
-            <Text category="h5" alignSelf="center">
-              Register
-            </Text>
+      <Card
+        style={{
+          width: '100%',
+          alignSelf: 'center',
+        }}
+      >
+        <Layout>
+          <Text category="h5" alignSelf="center">
+            Register
+          </Text>
 
-            <Controller
-              control={control}
-              rules={{
-                required: {value: true, message: 'is required'},
-                minLength: {value: 3, message: 'min length is 3 characters'},
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
+          <Controller
+            control={control}
+            rules={{
+              required: {value: true, message: 'is required'},
+              minLength: {value: 3, message: 'min length 3 characters'},
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <>
                 <Input
                   placeholder="Full name"
-                  rules={{required: {value: true, message: 'is required'}}}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
+                  style={{alignSelf: 'center', marginVertical: 4}}
                 />
-              )}
-              name="full_name"
-            />
-
-            <Controller
-              control={control}
-              rules={{
-                required: {value: true, message: 'is required'},
-                minLength: {value: 3, message: 'min length is 3 characters'},
-                validate: async (value) => {
-                  try {
-                    const isAvailable = await checkUsername(value);
-                    console.log('username available?', value, isAvailable);
-                    return isAvailable ? isAvailable : 'Username taken';
-                  } catch (error) {
-                    console.error(error);
-                  }
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
-                <Input
-                  placeholder="username"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  autoCapitalize="none"
-                  style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
-                />
-              )}
-              name="username"
-            />
-            {errors.username && (
-              <Text style={{color: 'red'}}>This is required.</Text>
+                {errors.full_name && (
+                  <Text style={{color: 'red'}}>{errors.full_name.message}</Text>
+                )}
+              </>
             )}
+            name="full_name"
+          />
 
-            <Controller
-              control={control}
-              rules={{
-                required: {value: true, message: 'is required'},
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'must be a valid email',
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
+          <Controller
+            control={control}
+            rules={{
+              required: {value: true, message: 'is required'},
+              minLength: {value: 3, message: 'min length 3 characters'},
+              validate: async (value) => {
+                try {
+                  const isAvailable = await checkUsername(value);
+                  console.log('username available?', value, isAvailable);
+                  return isAvailable ? isAvailable : 'username taken';
+                } catch (error) {
+                  console.error(error);
+                }
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => {
+              return (
+                <>
+                  <Input
+                    placeholder="username"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    style={{alignSelf: 'center', marginVertical: 4}}
+                  />
+                  {errors.username && (
+                    <Text style={{color: 'red'}}>
+                      {errors.username.message}
+                    </Text>
+                  )}
+                </>
+              );
+            }}
+            name="username"
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: {value: true, message: 'is required'},
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'must be a valid email',
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <>
                 <Input
                   placeholder="Email"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
+                  style={{alignSelf: 'center', marginVertical: 4}}
                   autoCapitalize="none"
-                  errorMessage={errors.email?.message}
                 />
-              )}
-              name="email"
-            />
+                {errors.email && (
+                  <Text style={{color: 'red'}}>{errors.email.message}</Text>
+                )}
+              </>
+            )}
+            name="email"
+          />
 
-            <Controller
-              control={control}
-              rules={{
-                maxLength: 100,
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
+          <Controller
+            control={control}
+            rules={{
+              required: {value: true, message: 'is required'},
+              minLength: {value: 5, message: 'min length 5 characters'},
+              maxLength: 100,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <>
                 <Input
                   placeholder="password"
                   secureTextEntry={true}
@@ -142,23 +157,27 @@ const RegisterForm = ({visible, onClose, onSuccess}) => {
                   onChangeText={onChange}
                   value={value}
                   autoCapitalize="none"
-                  style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
+                  style={{alignSelf: 'center', marginVertical: 4}}
                 />
-              )}
-              name="password"
-            />
+                {errors.password && (
+                  <Text style={{color: 'red'}}>{errors.password.message}</Text>
+                )}
+              </>
+            )}
+            name="password"
+          />
 
-            <Controller
-              control={control}
-              rules={{
-                required: {value: true, message: 'is required'},
-                validate: (value) => {
-                  const {password} = getValues();
-                  // console.log('getValues password', password);
-                  return value === password ? true : 'Passwords dont match!';
-                },
-              }}
-              render={({field: {onChange, onBlur, value}}) => (
+          <Controller
+            control={control}
+            rules={{
+              required: {value: true, message: 'is required'},
+              validate: (value) => {
+                const {password} = getValues();
+                return value === password ? true : 'Passwords dont match!';
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <>
                 <Input
                   placeholder="Confirm password"
                   onBlur={onBlur}
@@ -166,21 +185,26 @@ const RegisterForm = ({visible, onClose, onSuccess}) => {
                   value={value}
                   autoCapitalize="none"
                   secureTextEntry={true}
-                  errorMessage={errors.confirm_password?.message}
-                  style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
+                  style={{alignSelf: 'center', marginVertical: 4}}
                 />
-              )}
-              name="confirm_password"
-            />
-            <Button
-              status="info"
-              onPress={handleSubmit(register)}
-              style={{width: '90%', alignSelf: 'center', marginVertical: 4}}
-            >
-              Register
-            </Button>
-          </Layout>
-        </Card>
+                {errors.confirm_password && (
+                  <Text style={{color: 'red'}}>
+                    {errors.confirm_password.message}
+                  </Text>
+                )}
+              </>
+            )}
+            name="confirm_password"
+          />
+          <Button
+            status="info"
+            onPress={handleSubmit(register)}
+            style={{width: '80%', alignSelf: 'center', marginVertical: 4}}
+          >
+            Register
+          </Button>
+        </Layout>
+      </Card>
     </Modal>
   );
 };
