@@ -32,6 +32,7 @@ const Upload = ({visible, onClose, navigation}) => {
     mode: 'onBlur',
   });
 
+  // upload new posts
   const upload = async (uploadData) => {
     console.log('upload', uploadData);
     const formData = new FormData();

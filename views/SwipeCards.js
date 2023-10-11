@@ -26,16 +26,9 @@ const SwipeCards = () => {
   const {mediaArray, loadMedia} = useMedia();
   const {user} = useContext(MainContext);
 
-  // Reset notMyMedia when refreshing
-  const resetNotMyMedia = () => {
-    notMyMedia = mediaArray.filter((item) => {
-      return (
-        !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
-        item.user_id !== user.user_id
-      );
-    });
-  };
+  const [notMyMedia, setNotMyMedia] = useState([]); // Initialize notMyMedia as an empty array
 
+  // refresh button functionality
   const handleRefresh = async () => {
     console.log('Refreshing...');
     try {
@@ -43,12 +36,14 @@ const SwipeCards = () => {
       setIndex(0);
       translateX.setValue(0);
       swipesRef.current = 0;
-      resetNotMyMedia();
+      //resetNotMyMedia();
+      fetchNotMyMedia();
     } catch (error) {
       console.error('Refresh failed', error);
     }
   };
 
+  // getting favourites from API
   const [favouriteMedia, setFavouriteMedia] = useState([]);
   const fetchFavourites = async () => {
     try {
@@ -60,16 +55,9 @@ const SwipeCards = () => {
     }
   };
   useEffect(() => {
+    fetchNotMyMedia();
     fetchFavourites();
   }, []);
-
-  let notMyMedia = mediaArray.filter((item) => {
-    // Check if the item is not in the favoriteMedia list
-    return (
-      !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
-      item.user_id !== user.user_id
-    );
-  });
 
   const [index, setIndex] = useState(0);
   const translateX = useMemo(() => new Animated.Value(0), []);
@@ -89,6 +77,7 @@ const SwipeCards = () => {
     {useNativeDriver: false},
   );
 
+  // swiping functionality
   const handleSwipe = async ({nativeEvent}) => {
     const {state, translationX, velocityX} = nativeEvent;
     if (state === State.END) {
@@ -107,6 +96,11 @@ const SwipeCards = () => {
           console.error(error.message);
         }
 
+        // Remove the liked post from the notMyMedia array
+      const updatedNotMyMedia = [...notMyMedia];
+      updatedNotMyMedia.splice(index, 1);
+      setNotMyMedia(updatedNotMyMedia);
+
         Animated.timing(translateX, {
           toValue: width,
           duration: 400,
@@ -124,6 +118,21 @@ const SwipeCards = () => {
           topOffset: 10,
           visibilityTime: 1000,
         });
+
+        // Remove the disliked post from the notMyMedia array
+      const updatedNotMyMedia = [...notMyMedia];
+      updatedNotMyMedia.splice(index, 1);
+      setIndex((prevIndex) => (prevIndex + 1) % updatedNotMyMedia.length);
+
+      // Check if there are still cards to display
+      if (updatedNotMyMedia.length > 0) {
+        // Make sure the index does not exceed the array length
+        setIndex((prevIndex) => prevIndex % updatedNotMyMedia.length);
+      }
+
+      // Update the notMyMedia array
+      setNotMyMedia(updatedNotMyMedia);
+
         Animated.timing(translateX, {
           toValue: -width,
           duration: 400,
@@ -148,6 +157,17 @@ const SwipeCards = () => {
     () => notMyMedia[index] || {},
     [notMyMedia, index],
   );
+
+  const fetchNotMyMedia = () => {
+    const updatedNotMyMedia = mediaArray.filter((item) => {
+      return (
+        !favouriteMedia.some((favorite) => favorite.file_id === item.file_id) &&
+        item.user_id !== user.user_id
+      );
+    });
+    setNotMyMedia(updatedNotMyMedia);
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <Toast />
