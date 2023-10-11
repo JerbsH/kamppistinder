@@ -16,7 +16,10 @@ In utils folder create a file named apiKey.js. In the file add this:
 - Uploading a picture
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Login Screen](./assets/screenshots/login-screen.jpg)
+![Swipe Cards](./assets/screenshots/swipecards.jpg)
+![User Likes](./assets/screenshots/mylikes.jpg)
+![Comments](./assets/screenshots/comments.jpg)
 
 
 ## Authors

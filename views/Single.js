@@ -92,7 +92,7 @@ const Single = ({route, navigation}) => {
       <Image
         source={{uri: mediaUrl + filename}}
         resizeMode="cover"
-        style={{height: 300, marginBottom: 10}}
+        style={{height: 300, marginBottom: 10, borderRadius: 15}}
       />
       <Text category="h2" style={{marginVertical: 10}}>
         {title}
