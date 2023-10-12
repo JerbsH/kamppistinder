@@ -149,6 +149,7 @@ const Upload = ({visible, onClose, navigation}) => {
               <Controller
                 control={control}
                 rules={{
+                  required: {value: true, message: 'is required'},
                   minLength: {value: 10, message: 'min 10 characters'},
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
@@ -158,18 +159,24 @@ const Upload = ({visible, onClose, navigation}) => {
                       marginVertical: 4,
                     }}
                   >
-                    <Input
-                      multiline={true}
-                      placeholder="Description (10 characters min.)"
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      errorMessage={errors.description?.message}
-                      style={{
-                        alignSelf: 'center',
-                        maxHeight: 100,
-                      }}
-                    />
+                    <>
+                      <Input
+                        multiline={true}
+                        placeholder="Description (10 characters min.)"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        style={{
+                          alignSelf: 'center',
+                          maxHeight: 100,
+                        }}
+                      />
+                      {errors.description && (
+                        <Text style={{color: 'red'}}>
+                          {errors.description.message}
+                        </Text>
+                      )}
+                    </>
                   </ScrollView>
                 )}
                 name="description"

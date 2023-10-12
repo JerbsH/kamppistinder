@@ -86,7 +86,12 @@ const Stackscreen = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen name="My files" component={MyFiles} />
-          <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="Single"
+           component={Single}
+           options={{
+
+          headerTitle: ""
+           }} />
           <Stack.Screen name="Modify file" component={Modify} />
           <Stack.Screen name="Comments" component={Comments}/>
 

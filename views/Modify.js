@@ -116,19 +116,29 @@ const Modify = ({navigation, route}) => {
       <Controller
         control={control}
         rules={{
+          required: {value: true, message: 'is required'},
           minLength: {value: 10, message: 'min 10 characters'},
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <ScrollView style={{maxHeight: 200}}>
-            <Input
-              multiline={true}
-              placeholder="Description (optional)"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.description?.message}
-              style={{width: '70%', alignSelf: 'center', marginVertical: 8}}
-            />
+            <>
+              <Input
+                multiline={true}
+                placeholder="Description (optional)"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={{
+                  maxHeight: 100,
+                  width: '70%',
+                  alignSelf: 'center',
+                  marginVertical: 8,
+                }}
+              />
+              {errors.description && (
+                <Text style={{color: 'red'}}>{errors.description.message}</Text>
+              )}
+            </>
           </ScrollView>
         )}
         name="description"

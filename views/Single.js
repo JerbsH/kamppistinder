@@ -7,6 +7,7 @@ import {MainContext} from '../contexts/MainContext';
 import {Button, Card, Text} from '@ui-kitten/components';
 import {Divider, Image} from 'react-native-elements';
 import Toast from 'react-native-toast-message';
+import { ScrollView } from 'react-native';
 
 const Single = ({route, navigation}) => {
   const [owner, setOwner] = useState({});
@@ -89,6 +90,7 @@ const Single = ({route, navigation}) => {
   // Show full image and metadata
   return (
     <Card>
+      <ScrollView>
       <Image
         source={{uri: mediaUrl + filename}}
         resizeMode="cover"
@@ -120,6 +122,7 @@ const Single = ({route, navigation}) => {
       >
         Remove like
       </Button>
+      </ScrollView>
     </Card>
   );
 };

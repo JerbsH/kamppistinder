@@ -1,5 +1,5 @@
 import {Button, Card, Icon, Layout, Text} from '@ui-kitten/components';
-import {Image} from 'react-native';
+import {Image, ScrollView} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,7 +55,8 @@ const Profile = () => {
           alignItems: 'center',
           marginBottom: '15%',
         }}
-      >
+        >
+        <ScrollView>
         {/* Render the ModifyForm as a modal */}
         {isModifyVisible && (
           <ModifyForm
@@ -111,6 +112,7 @@ const Profile = () => {
             <Text style={{textAlign: 'center'}}>{user.email}</Text>
           </Layout>
         </Card>
+
         <Button
           status="info"
           style={{borderRadius: 15, marginBottom: 5}}
@@ -121,6 +123,7 @@ const Profile = () => {
         <Button status="info" style={{borderRadius: 15}} onPress={logOut}>
           Log out
         </Button>
+      </ScrollView>
       </Card>
     </Layout>
   );

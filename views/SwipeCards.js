@@ -211,7 +211,7 @@ const SwipeCards = () => {
         </PanGestureHandler>
       ) : (
         <View style={styles.noMediaContainer}>
-          <Text style={styles.noMediaText}>No more media to display</Text>
+          <Text style={styles.noMediaText}>Refresh to start swiping</Text>
         </View>
       )}
     </GestureHandlerRootView>
