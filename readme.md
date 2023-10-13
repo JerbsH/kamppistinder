@@ -4,7 +4,7 @@ App for students to search for appartments and roommates. Swipe through posts an
 
 ## Modifications after demo
 
-Added scrollview to Profile.js , Removed Single.js header, maxheight set in Modify.js description and minlenght error message fixed.
+Added scrollview to Profile.js , Removed Single.js header, maxheight set in Modify.js description and minlength error message fixed.
 
 
 ## Installation
