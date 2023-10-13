@@ -2,6 +2,10 @@
 
 App for students to search for appartments and roommates. Swipe through posts and start chatting with people.
 
+## Modifications after demo
+
+Added scrollview to Profile.js , Removed Single.js header, maxheight set in Modify.js description and minlenght error message fixed.
+
 
 ## Installation
 

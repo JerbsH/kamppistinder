@@ -131,17 +131,21 @@ const Upload = ({visible, onClose, navigation}) => {
                   required: {value: true, message: 'is required'},
                 }}
                 render={({field: {onChange, onBlur, value}}) => (
-                  <Input
-                    placeholder="What is your name?"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    errorMessage={errors.title?.message}
-                    style={{
-                      alignSelf: 'center',
-                      marginVertical: 4,
-                    }}
-                  />
+                  <>
+                    <Input
+                      placeholder="What is your name?"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      style={{
+                        alignSelf: 'center',
+                        marginVertical: 4,
+                      }}
+                    />
+                    {errors.title && (
+                      <Text style={{color: 'red'}}>{errors.title.message}</Text>
+                    )}
+                  </>
                 )}
                 name="title"
               />
